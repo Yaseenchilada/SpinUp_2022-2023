@@ -30,7 +30,7 @@ float currentMaxRotationSpeed = 0.4;
 float currentMaxTranslationSpeed = 1;
 
 
-float cap(float inputVal, float maxMinVal) {
+float cap(float inputVal, float maxMinVal) { // Cap allow full use of motor range with steering
   if (inputVal > maxMinVal){
     return maxMinVal;
   } else if (inputVal < -maxMinVal) {
@@ -44,7 +44,7 @@ float cap(float inputVal, float maxMinVal) {
 }
 
 
-void driveTrainLoop(){
+void driveTrainLoop(){ // Controls Drivetrain > Gets Joystick Position & Sets to Motors
   //THE MOVE PLACE
   float V = Controller1.Axis3.position(percent); // Forward and backwards
   float H = Controller1.Axis4.position(percent); // Strafe
@@ -75,23 +75,24 @@ void driveTrainLoop(){
   BackRight.spin(forward);
 }
 
-void buttonControls(){
-//This is for Conveyor1 and Intake
-  if(Controller1.ButtonY.pressing() == true) {
-    ColorRoller.setVelocity(40,percent);
-    Conveyor1.setVelocity(40,percent);
-    ColorRoller.spin(forward);
-    Conveyor1.spin(forward);
+
+
+void buttonControls(){ // Controller Button Actions
+
+  if(Controller1.ButtonY.pressing() == true) { //This is for Conveyor1 and Intake
+    ColorRoller.setVelocity(40,percent); // Set Velocity of Intake
+    Conveyor1.setVelocity(40,percent); // Set Velocity of Conveyor1
+    ColorRoller.spin(forward); // Start Motor
+    Conveyor1.spin(forward); // Start Motor
   }
     
   else if (Controller1.ButtonB.pressing() == true) {
-    Conveyor1.setVelocity(0,percent);
-    // if the first object detected in the vision sensor is wider than 120, then stop the motor
-    if (ColorSensor.objects[0].width >= 120) { 
+    Conveyor1.setVelocity(0,percent); // 
+
+    if (ColorSensor.objects[0].width >= 120) { // if the first object detected in the vision sensor is wider than 120, then stop the motor
       ColorRoller.setVelocity(0,percent);
     }
-    // otherwise run the motor
-    else {
+    else { // otherwise run the motor
       ColorRoller.setVelocity(20,percent);
     }
   }
@@ -102,22 +103,21 @@ void buttonControls(){
   }
 
 
-  //This is for the Flywheel
-  if(Controller1.ButtonR2.pressing() == true) {
-    Flywheel.setVelocity(100,percent);
-    Flywheel.spin(forward);
+  
+  if(Controller1.ButtonR2.pressing() == true) { //This is for the Flywheel
+    Flywheel.setVelocity(100,percent); // Set Velocity of Flywheel to 100%
+    Flywheel.spin(forward); // Start Motor
   }
   else {
-    Flywheel.setVelocity(0,percent);
+    Flywheel.setVelocity(0,percent); // Stop Motor Velocity
   }
     
-  //This is for Conveyor2
-  if(Controller1.ButtonL2.pressing() == true) {
-    Conveyor2.setVelocity(30,percent);
-    Conveyor2.spin(forward);
+  if(Controller1.ButtonL2.pressing() == true) { //This is for Conveyor2
+    Conveyor2.setVelocity(30,percent); // Set Velocity
+    Conveyor2.spin(forward); // Start Motor
   }
   else {
-    Conveyor2.setVelocity(0,percent);
+    Conveyor2.setVelocity(0,percent); // Stop Motor Velocity 
   }
 }
 

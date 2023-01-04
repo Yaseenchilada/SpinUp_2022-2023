@@ -50,41 +50,32 @@ void driveTrainLoop(){ // Controls Drivetrain > Gets Joystick Position & Sets to
   float H = Controller1.Axis4.position(percent); // Strafe
   float S = Controller1.Axis1.position(percent); // Steering
     
-  float vA = V * currentMaxTranslationSpeed; // Limit Forward/Backwards Speed
-  float hA = H * currentMaxTranslationSpeed; // Limit Strafe Speed
-  float sA = S * currentMaxRotationSpeed; // Limit Steering Speed
-    
-  float drivetrainMax = 100 - abs(sA); // Max motor movement given steering is constant
+    float drivetrainMax = 100 - abs(sA);
+    //this is the max speed
+    // ---------------------
 
-  // Set Motor Velocity with Steering Prioritized with 
-  float FL_motor_command = sA + cap(vA + hA, drivetrainMax);
-  float BL_motor_command = sA + cap(vA + -hA, drivetrainMax);
-  float FR_motor_command = -sA + cap(vA + -hA, drivetrainMax);
-  float BR_motor_command = -sA + cap(vA + hA, drivetrainMax);
+    float FL_motor_command = sA + cap(vA + hA, drivetrainMax);
+    float BL_motor_command = sA + cap(vA + -hA, drivetrainMax);
+    float FR_motor_command = -sA + cap(vA + -hA, drivetrainMax);
+    float BR_motor_command = -sA + cap(vA + hA, drivetrainMax);
 
-  // Assign Proper Velocity for Each Motor
-  FrontLeft.setVelocity(FL_motor_command, percent);
-  BackLeft.setVelocity(BL_motor_command, percent);
-  FrontRight.setVelocity(FR_motor_command, percent);
-  BackRight.setVelocity(BR_motor_command, percent);
+    FrontLeft.setVelocity(FL_motor_command, percent);
+    BackLeft.setVelocity(BL_motor_command, percent);
+    FrontRight.setVelocity(FR_motor_command, percent);
+    BackRight.setVelocity(BR_motor_command, percent);
 
-  // Start Motors
-  FrontLeft.spin(forward);
-  FrontRight.spin(forward);
-  BackLeft.spin(forward);
-  BackRight.spin(forward);
-}
+    FrontLeft.spin(forward);
+    FrontRight.spin(forward);
+    BackLeft.spin(forward);
+    BackRight.spin(forward);
 
-
-
-void buttonControls(){ // Controller Button Actions
-
-  if(Controller1.ButtonY.pressing() == true) { //This is for Conveyor1 and Intake
-    ColorRoller.setVelocity(40,percent); // Set Velocity of Intake
-    Conveyor1.setVelocity(40,percent); // Set Velocity of Conveyor1
-    ColorRoller.spin(forward); // Start Motor
-    Conveyor1.spin(forward); // Start Motor
-  }
+    //This is for Conveyor1 and Intake
+    if(Controller1.ButtonY.pressing() == true) {
+      ColorRoller.setVelocity(40,percent);
+      Conveyor1.setVelocity(80,percent);
+      ColorRoller.spin(forward);
+      Conveyor1.spin(forward);
+    }
     
   else if (Controller1.ButtonB.pressing() == true) {
     Conveyor1.setVelocity(0,percent); // 
@@ -92,48 +83,27 @@ void buttonControls(){ // Controller Button Actions
     if (ColorSensor.objects[0].width >= 120) { // if the first object detected in the vision sensor is wider than 120, then stop the motor
       ColorRoller.setVelocity(0,percent);
     }
-    else { // otherwise run the motor
-      ColorRoller.setVelocity(20,percent);
+
+    //This is for the Flywheel
+    if(Controller1.ButtonR2.pressing() == true) {
+      Flywheel.setVelocity(100,percent);
+      Flywheel.spin(forward);
+    }
+    else {
+      Flywheel.setVelocity(0,percent);
+    }
+    
+    //This is for Conveyor2
+    if(Controller1.ButtonL2.pressing() == true) {
+      Conveyor2.setVelocity(30,percent);
+      Conveyor2.spin(forward);
+    }
+    else {
+      Conveyor2.setVelocity(0,percent);
     }
   }
 
-  else {
-    ColorRoller.setVelocity(0,percent);
-    Conveyor1.setVelocity(0,percent);
-  }
-
-
-  
-  if(Controller1.ButtonR2.pressing() == true) { //This is for the Flywheel
-    Flywheel.setVelocity(100,percent); // Set Velocity of Flywheel to 100%
-    Flywheel.spin(forward); // Start Motor
-  }
-  else {
-    Flywheel.setVelocity(0,percent); // Stop Motor Velocity
-  }
-    
-  if(Controller1.ButtonL2.pressing() == true) { //This is for Conveyor2
-    Conveyor2.setVelocity(30,percent); // Set Velocity
-    Conveyor2.spin(forward); // Start Motor
-  }
-  else {
-    Conveyor2.setVelocity(0,percent); // Stop Motor Velocity 
-  }
-}
-
-
-
-int main() {
-  // Initializing Robot Configuration. DO NOT REMOVE!
-  vexcodeInit();
-
-  while(420==420) {
-    driveTrainLoop();
-
-    buttonControls();
-    
   }
   
 }
 
-// created by yaseen and hayden. the best

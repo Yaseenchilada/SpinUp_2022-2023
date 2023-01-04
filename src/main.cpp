@@ -104,7 +104,7 @@ int main() {
     //This is for Conveyor1 and Intake
     if(Controller1.ButtonY.pressing() == true) {
       ColorRoller.setVelocity(40,percent);
-      Conveyor1.setVelocity(80,percent);
+      Conveyor1.setVelocity(90,percent);
       ColorRoller.spin(forward);
       Conveyor1.spin(forward);
     }

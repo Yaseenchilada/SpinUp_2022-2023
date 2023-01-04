@@ -26,7 +26,7 @@
 
 using namespace vex;
 
-float currentMaxRotationSpeed = 0.4;
+float currentMaxRotationSpeed = 0.55;
 float currentMaxTranslationSpeed = 1;
 
 

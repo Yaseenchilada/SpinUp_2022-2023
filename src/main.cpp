@@ -80,27 +80,6 @@ int main() {
     BackLeft.spin(forward);
     BackRight.spin(forward);
 
-
-
-
-
-
-
-
-
-    /*//More Drivetrain stuff
-    FrontLeft.setVelocity(LM * currentMaxSpeed,percent);
-    FrontLeft.spin(forward); 
-
-    FrontRight.setVelocity(RM * currentMaxSpeed,percent);
-    FrontRight.spin(forward);
-
-    BackRight.setVelocity(RM * currentMaxSpeed,percent);
-    BackRight.spin(forward);
-
-    BackLeft.setVelocity(RM * currentMaxSpeed,percent);
-    BackLeft.spin(forward);*/
-
     //This is for Conveyor1 and Intake
     if(Controller1.ButtonY.pressing() == true) {
       ColorRoller.setVelocity(40,percent);
@@ -126,7 +105,6 @@ int main() {
       Conveyor1.setVelocity(0,percent);
     }
 
-
     //This is for the Flywheel
     if(Controller1.ButtonR2.pressing() == true) {
       Flywheel.setVelocity(100,percent);
@@ -145,36 +123,7 @@ int main() {
       Conveyor2.setVelocity(0,percent);
     }
 
-
-
-
-
-
-
-
   }
   
 }
 
-/*CLAW TIME
-    Claw_Motor.setStopping(hold);
-    if (Controller1.ButtonR2.pressing() == true) {
-      Claw_Motor.setVelocity(50,percent);
-      Claw_Motor.spin(forward);
-    } 
-    else if (Controller1.ButtonR1.pressing() == true) {
-      Claw_Motor.setVelocity(50,percent);
-      Claw_Motor.spin(reverse);
-    } 
-    else {
-    Claw_Motor.stop();
-    }
-
-    //Claw Limiter
-    if (Controller1.ButtonY.pressing() == true) {
-     Claw_Motor.setPosition(0, degrees); 
-      
-    }
-    if (Controller1.ButtonA.pressing() == true) {
-      Claw_Motor.spinToPosition(80, degrees); 
-    }*/

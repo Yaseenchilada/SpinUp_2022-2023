@@ -26,8 +26,15 @@
 
 using namespace vex;
 
-float currentMaxRotationSpeed = 0.55;
-float currentMaxTranslationSpeed = 1;
+
+float MaxRotationSpeed = .55; // Normal Steering Speed no Turbo
+float MaxTranslationSpeed = .80; // Normal Driving Speed no Turbo
+
+float TurboRotationSpeed = .85; // Turbo Rotation Speed 
+float TurboTranslationSpeed = 1; // Turbo Translation Speed
+
+float currentMaxRotationSpeed = MaxRotationSpeed;
+float currentMaxTranslationSpeed = MaxTranslationSpeed;
 
 
 float cap(float inputVal, float maxMinVal) { // Cap allow full use of motor range with steering
@@ -122,29 +129,46 @@ void buttonControls(){ // Controller Button Actions
     Conveyor2.setVelocity(75,percent); // Set Velocity
     Conveyor2.spin(forward); // Start Motor
   }
-//<<<<<<< HEAD
+
   else if(Controller1.ButtonL1.pressing() == true) { //This is for Conveyor2 Reverse
     Conveyor2.setVelocity(-35,percent); // Set Velocity
     Conveyor2.spin(forward); // Start Motor
-//=======
+
   } 
   else {
     Conveyor2.setVelocity(0,percent); // Stop Motor Velocity 
   }
-  /////
+
+
+
+  // BETA TURBO CODE
+  if(Controller1.ButtonR1.pressing() == true){
+    currentMaxRotationSpeed = TurboRotationSpeed; // Sets current rotation speed to turbo value
+    currentMaxTranslationSpeed = TurboTranslationSpeed; // Sets current translation speed to turbo value
+  } else{
+    currentMaxRotationSpeed = MaxRotationSpeed; // Sets current max rotation speed back to default
+    currentMaxTranslationSpeed = MaxTranslationSpeed; // Sets current translation speed back to default
+  }
+
 
 }
 
 
 // Hayden's Testing Code :)
-/*
+
 void testingFunction(){
-  Brain.Screen.clearLine();
-  Brain.Screen.print("Yaseen");
-  Brain.Screen.setCursor(1,1);
-  Brain.Screen.print(Controller1.Axis3.position(percent));
+  Controller1.Screen.clearScreen();
+  Controller1.Screen.setCursor(1,1);
+  Controller1.Screen.print("Yaseen");
+  //Controller1.Screen.setCursor(2,1);
+  //Controller1.Screen.print(Brain.Battery.voltage());
+
+  //Brain.Screen.clearLine();
+  //Brain.Screen.print("Yaseen");
+  //Brain.Screen.setCursor(1,1);
+  //Brain.Screen.print(Controller1.Axis3.position(percent));
 }
-*/
+
 
 
 int main() {
@@ -155,7 +179,7 @@ int main() {
     driveTrainLoop();
 
     buttonControls();
-    //testingFunction(); //hayden is messing with this
+    testingFunction(); //hayden is messing with this
   }
   
 }

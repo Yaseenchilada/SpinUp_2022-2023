@@ -109,8 +109,6 @@ void buttonControls(){ // Controller Button Actions
     Conveyor1.setVelocity(0,percent);
   }
 
-  
-  
   if(Controller1.ButtonR2.pressing() == true) { //This is for the Flywheel
     Flywheel.setVelocity(100,percent); // Set Velocity of Flywheel to 100%
     Flywheel.spin(forward); // Start Motor
@@ -127,13 +125,16 @@ void buttonControls(){ // Controller Button Actions
     Conveyor2.setVelocity(0,percent); // Stop Motor Velocity 
   }
 
+
+  // BROKEN???
   if(Controller1.ButtonL1.pressing() == true) { //This is for Conveyor2 Reverse
-    Conveyor2.setVelocity(35,percent); // Set Velocity
+    Conveyor2.setVelocity(-35,percent); // Set Velocity
     Conveyor2.spin(reverse); // Start Motor
   }
   else {
     Conveyor2.setVelocity(0,percent); // Stop Motor Velocity 
   }
+  /////
 
 }
 

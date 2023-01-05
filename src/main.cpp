@@ -138,6 +138,16 @@ void buttonControls(){ // Controller Button Actions
 }
 
 
+// Hayden's Testing Code :)
+/*
+void testingFunction(){
+  Brain.Screen.clearLine();
+  Brain.Screen.print("Yaseen");
+  Brain.Screen.setCursor(1,1);
+  Brain.Screen.print(Controller1.Axis3.position(percent));
+}
+*/
+
 
 int main() {
   // Initializing Robot Configuration. DO NOT REMOVE!
@@ -147,7 +157,7 @@ int main() {
     driveTrainLoop();
 
     buttonControls();
-    
+    //testingFunction(); //hayden is messing with this
   }
   
 }

@@ -81,7 +81,7 @@ void buttonControls(){ // Controller Button Actions
 
   if(Controller1.ButtonY.pressing() == true) { //This is for Conveyor1 and Intake
     ColorRoller.setVelocity(40,percent); // Set Velocity of Intake
-    Conveyor1.setVelocity(65,percent); // Set Velocity of Conveyor1
+    Conveyor1.setVelocity(45,percent); // Set Velocity of Conveyor1
     ColorRoller.spin(forward); // Start Motor
     Conveyor1.spin(forward); // Start Motor
   }
@@ -119,25 +119,15 @@ void buttonControls(){ // Controller Button Actions
 
 
   if(Controller1.ButtonL2.pressing() == true) { //This is for Conveyor2 Forwards
-    Conveyor2.setVelocity(35,percent); // Set Velocity
+    Conveyor2.setVelocity(75,percent); // Set Velocity
     Conveyor2.spin(forward); // Start Motor
   }
-<<<<<<< HEAD
+//<<<<<<< HEAD
   else if(Controller1.ButtonL1.pressing() == true) { //This is for Conveyor2 Reverse
     Conveyor2.setVelocity(-35,percent); // Set Velocity
     Conveyor2.spin(forward); // Start Motor
-=======
-  else {
-    Conveyor2.setVelocity(0,percent); // Stop Motor Velocity 
-  }
-
-
-  // BROKEN???
-  if(Controller1.ButtonL1.pressing() == true) { //This is for Conveyor2 Reverse
-    Conveyor2.setVelocity(-35,percent); // Set Velocity
-    Conveyor2.spin(reverse); // Start Motor
->>>>>>> 5e87680941e9c4c547f732bd7e24fa0a6defe0a6
-  }
+//=======
+  } 
   else {
     Conveyor2.setVelocity(0,percent); // Stop Motor Velocity 
   }

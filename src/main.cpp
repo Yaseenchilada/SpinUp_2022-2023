@@ -60,8 +60,8 @@ void driveTrainLoop(){ // Controls Drivetrain > Gets Joystick Position & Sets to
   float vA = V * currentMaxTranslationSpeed; // Limit Forward/Backwards Speed
   float hA = H * currentMaxTranslationSpeed; // Limit Strafe Speed
   float sA = S * currentMaxRotationSpeed; // Limit Steering Speed
-    
-  float drivetrainMax = 100 - fabs(sA); // Max motor movement given steering is constant
+
+  float drivetrainMax = 100 - fabsf(sA); // Max motor movement given steering is constant
 
   // Set Motor Velocity with Steering Prioritized with 
   float FL_motor_command = sA + cap(vA + hA, drivetrainMax);

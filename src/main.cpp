@@ -81,18 +81,18 @@ void buttonControls(){ // Controller Button Actions
 
   if(Controller1.ButtonY.pressing() == true) { //This is for Conveyor1 and Intake
     ColorRoller.setVelocity(40,percent); // Set Velocity of Intake
-    Conveyor1.setVelocity(59,percent); // Set Velocity of Conveyor1
+    Conveyor1.setVelocity(65,percent); // Set Velocity of Conveyor1
     ColorRoller.spin(forward); // Start Motor
     Conveyor1.spin(forward); // Start Motor
   }
-
-  if(Controller1.ButtonX.pressing() == true) { // This is for Conveyor1 and Intake Rejection
+  
+  else if(Controller1.ButtonX.pressing() == true) { // This is for Conveyor1 and Intake Rejection
     ColorRoller.setVelocity(100,percent); // Set Velocity of Intake
     Conveyor1.setVelocity(100,percent); // Set Velocity of Conveyor1
     ColorRoller.spin(reverse); // Start Motor 
     Conveyor1.spin(reverse); // Start Motor
   }
-    
+
   else if (Controller1.ButtonB.pressing() == true) {
     Conveyor1.setVelocity(0,percent); // 
 
@@ -109,7 +109,7 @@ void buttonControls(){ // Controller Button Actions
     Conveyor1.setVelocity(0,percent);
   }
 
-
+  
   
   if(Controller1.ButtonR2.pressing() == true) { //This is for the Flywheel
     Flywheel.setVelocity(100,percent); // Set Velocity of Flywheel to 100%

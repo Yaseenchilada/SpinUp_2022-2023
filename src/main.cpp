@@ -118,14 +118,23 @@ void buttonControls(){ // Controller Button Actions
   else {
     Flywheel.setVelocity(0,percent); // Stop Motor Velocity
   }
-    
-  if(Controller1.ButtonL2.pressing() == true) { //This is for Conveyor2
-    Conveyor2.setVelocity(30,percent); // Set Velocity
+
+  if(Controller1.ButtonL2.pressing() == true) { //This is for Conveyor2 Forwards
+    Conveyor2.setVelocity(35,percent); // Set Velocity
     Conveyor2.spin(forward); // Start Motor
   }
   else {
     Conveyor2.setVelocity(0,percent); // Stop Motor Velocity 
   }
+
+  if(Controller1.ButtonL1.pressing() == true) { //This is for Conveyor2 Reverse
+    Conveyor2.setVelocity(-35,percent); // Set Velocity
+    Conveyor2.spin(forward); // Start Motor
+  }
+  else {
+    Conveyor2.setVelocity(0,percent); // Stop Motor Velocity 
+  }
+
 }
 
 

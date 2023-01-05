@@ -109,8 +109,6 @@ void buttonControls(){ // Controller Button Actions
     Conveyor1.setVelocity(0,percent);
   }
 
-  
-  
   if(Controller1.ButtonR2.pressing() == true) { //This is for the Flywheel
     Flywheel.setVelocity(100,percent); // Set Velocity of Flywheel to 100%
     Flywheel.spin(forward); // Start Motor
@@ -124,16 +122,39 @@ void buttonControls(){ // Controller Button Actions
     Conveyor2.setVelocity(35,percent); // Set Velocity
     Conveyor2.spin(forward); // Start Motor
   }
+<<<<<<< HEAD
   else if(Controller1.ButtonL1.pressing() == true) { //This is for Conveyor2 Reverse
     Conveyor2.setVelocity(-35,percent); // Set Velocity
     Conveyor2.spin(forward); // Start Motor
-  }
+=======
   else {
     Conveyor2.setVelocity(0,percent); // Stop Motor Velocity 
   }
 
+
+  // BROKEN???
+  if(Controller1.ButtonL1.pressing() == true) { //This is for Conveyor2 Reverse
+    Conveyor2.setVelocity(-35,percent); // Set Velocity
+    Conveyor2.spin(reverse); // Start Motor
+>>>>>>> 5e87680941e9c4c547f732bd7e24fa0a6defe0a6
+  }
+  else {
+    Conveyor2.setVelocity(0,percent); // Stop Motor Velocity 
+  }
+  /////
+
 }
 
+
+// Hayden's Testing Code :)
+/*
+void testingFunction(){
+  Brain.Screen.clearLine();
+  Brain.Screen.print("Yaseen");
+  Brain.Screen.setCursor(1,1);
+  Brain.Screen.print(Controller1.Axis3.position(percent));
+}
+*/
 
 
 int main() {
@@ -144,7 +165,7 @@ int main() {
     driveTrainLoop();
 
     buttonControls();
-    
+    //testingFunction(); //hayden is messing with this
   }
   
 }

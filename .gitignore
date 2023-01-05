@@ -2,3 +2,7 @@
 compile_commands.json
 *.json
 compile_commands.json
+*.map
+*.elf
+*.bin
+*.o

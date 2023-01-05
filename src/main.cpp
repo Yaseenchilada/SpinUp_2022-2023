@@ -128,8 +128,8 @@ void buttonControls(){ // Controller Button Actions
   }
 
   if(Controller1.ButtonL1.pressing() == true) { //This is for Conveyor2 Reverse
-    Conveyor2.setVelocity(-35,percent); // Set Velocity
-    Conveyor2.spin(forward); // Start Motor
+    Conveyor2.setVelocity(35,percent); // Set Velocity
+    Conveyor2.spin(reverse); // Start Motor
   }
   else {
     Conveyor2.setVelocity(0,percent); // Stop Motor Velocity 

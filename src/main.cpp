@@ -1,3 +1,73 @@
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// FrontLeft            motor         1               
+// BackLeft             motor         3               
+// FrontRight           motor         2               
+// BackRight            motor         4               
+// Flywheel             motor         5               
+// ColorRoller          motor         6               
+// Conveyor1            motor         7               
+// Conveyor2            motor         8               
+// Controller1          controller                    
+// ColorSensor          vision        9               
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// FrontLeft            motor         1               
+// BackLeft             motor         3               
+// FrontRight           motor         2               
+// BackRight            motor         4               
+// Flywheel             motor         5               
+// ColorRoller          motor         6               
+// Conveyor1            motor         7               
+// Conveyor2            motor         8               
+// Controller1          controller                    
+// ColorSensor          vision        9               
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// FrontLeft            motor         1               
+// BackLeft             motor         3               
+// FrontRight           motor         2               
+// BackRight            motor         4               
+// Flywheel             motor         5               
+// ColorRoller          motor         6               
+// Conveyor1            motor         7               
+// Conveyor2            motor         8               
+// Controller1          controller                    
+// ColorSensor          vision        9               
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// FrontLeft            motor         1               
+// BackLeft             motor         3               
+// FrontRight           motor         2               
+// BackRight            motor         4               
+// Flywheel             motor         5               
+// ColorRoller          motor         6               
+// Conveyor1            motor         7               
+// Conveyor2            motor         8               
+// Controller1          controller                    
+// ColorSensor          vision        9               
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// FrontLeft            motor         1               
+// BackLeft             motor         3               
+// FrontRight           motor         2               
+// BackRight            motor         4               
+// Flywheel             motor         5               
+// ColorRoller          motor         6               
+// Conveyor1            motor         7               
+// Conveyor2            motor         8               
+// Controller1          controller                    
+// ColorSensor          vision        9               
+// ---- END VEXCODE CONFIGURED DEVICES ----
 /*----------------------------------------------------------------------------*/
 /*                                                                            */
 /*    Module:       main.cpp                                                  */
@@ -33,6 +103,7 @@ float TurboRotationSpeed = .85; // Turbo Rotation Speed
 float TurboTranslationSpeed = 1; // Turbo Translation Speed
 
 bool turboModeActive = false; // Current Turbo Status
+bool imagedetection = false;
 
 float currentMaxRotationSpeed = MaxRotationSpeed;
 float currentMaxTranslationSpeed = MaxTranslationSpeed;
@@ -81,6 +152,7 @@ void turbocode(){ // BETA TURBO CODE CALLBACK FUNCTION
     
   }
 }
+
 
 
 
@@ -218,7 +290,6 @@ int main() {
     driveTrainLoop();
 
     buttonControls();
-
     // DELETE THESE LINES IF CODE IS BREAKING
     //testingFunction(); //hayden is messing with this
   }

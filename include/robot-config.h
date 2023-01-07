@@ -14,7 +14,7 @@ extern motor ColorRoller;
 extern motor Conveyor1;
 extern motor Conveyor2;
 extern controller Controller1;
-extern signature ColorSensor__SIG_1;
+extern signature ColorSensor__DISC;
 extern signature ColorSensor__SIG_2;
 extern signature ColorSensor__SIG_3;
 extern signature ColorSensor__SIG_4;

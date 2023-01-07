@@ -26,17 +26,23 @@
 
 using namespace vex;
 
-
 float MaxRotationSpeed = .55; // Normal Steering Speed no Turbo
 float MaxTranslationSpeed = .80; // Normal Driving Speed no Turbo
 
 float TurboRotationSpeed = .85; // Turbo Rotation Speed 
 float TurboTranslationSpeed = 1; // Turbo Translation Speed
+
 bool turboModeActive = false; // Current Turbo Status
 
 float currentMaxRotationSpeed = MaxRotationSpeed;
 float currentMaxTranslationSpeed = MaxTranslationSpeed;
 
+float conveyor1Speed = 45;
+float conveyor1SpeedTurbo = 85;
+float colorRollerSpeed = 40;
+float colorRollerSpeedTurbo = 80;
+float currentConveyor1Speed = conveyor1Speed;
+float currentcolorRollerSpeed = colorRollerSpeed;
 
 float cap(float inputVal, float maxMinVal) { // Cap allow full use of motor range with steering
   if (inputVal > maxMinVal){
@@ -55,16 +61,24 @@ void turbocode(){ // BETA TURBO CODE CALLBACK FUNCTION
   if(turboModeActive == false){
     currentMaxRotationSpeed = TurboRotationSpeed; // Sets current rotation speed to turbo value
     currentMaxTranslationSpeed = TurboTranslationSpeed; // Sets current translation speed to turbo value
-    turboModeActive = !turboModeActive;
-    Controller1.Screen.clearLine(2);  // DELETE THESE LINES IF CODE IS BREAKING
-    Controller1.Screen.setCursor(2, 1); // DELETE THESE LINES IF CODE IS BREAKING
+    currentConveyor1Speed = conveyor1SpeedTurbo;
+    currentcolorRollerSpeed = colorRollerSpeedTurbo;
+    
+    turboModeActive = true;
+    Controller1.Screen.clearLine(3);  // DELETE THESE LINES IF CODE IS BREAKING
+    Controller1.Screen.setCursor(3, 1); // DELETE THESE LINES IF CODE IS BREAKING
     Controller1.Screen.print("TURBO MODE ACTIVE"); // DELETE THESE LINES IF CODE IS BREAKING
 
   } else if(turboModeActive == true){
     currentMaxRotationSpeed = MaxRotationSpeed; // Sets current max rotation speed back to default
     currentMaxTranslationSpeed = MaxTranslationSpeed; // Sets current translation speed back to default
-    turboModeActive = !turboModeActive;
-    Controller1.Screen.clearLine(2); // DELETE THESE LINES IF CODE IS BREAKING
+    currentConveyor1Speed = conveyor1Speed;
+    currentcolorRollerSpeed = colorRollerSpeed; 
+
+    turboModeActive = false;
+    Controller1.Screen.clearLine(3); // DELETE THESE LINES IF CODE IS BREAKING
+    Controller1.Screen.clearLine(1);
+    
   }
 }
 
@@ -106,15 +120,15 @@ void driveTrainLoop(){ // Controls Drivetrain > Gets Joystick Position & Sets to
 void buttonControls(){ // Controller Button Actions
 
   if(Controller1.ButtonY.pressing() == true) { //This is for Conveyor1 and Intake
-    ColorRoller.setVelocity(40,percent); // Set Velocity of Intake
-    Conveyor1.setVelocity(45,percent); // Set Velocity of Conveyor1
+    ColorRoller.setVelocity(currentcolorRollerSpeed,percent); // Set Velocity of Intake
+    Conveyor1.setVelocity(currentConveyor1Speed,percent); // Set Velocity of Conveyor1
     ColorRoller.spin(forward); // Start Motor
     Conveyor1.spin(forward); // Start Motor
   }
   
   else if(Controller1.ButtonX.pressing() == true) { // This is for Conveyor1 and Intake Rejection
-    ColorRoller.setVelocity(-100,percent); // Set Velocity of Intake
-    Conveyor1.setVelocity(-100,percent); // Set Velocity of Conveyor1
+    ColorRoller.setVelocity(-currentcolorRollerSpeed,percent); // Set Velocity of Intake
+    Conveyor1.setVelocity(-currentConveyor1Speed,percent); // Set Velocity of Conveyor1
     ColorRoller.spin(forward); // Start Motor 
     Conveyor1.spin(forward); // Start Motor
   }
@@ -159,25 +173,7 @@ void buttonControls(){ // Controller Button Actions
   }
 
 
-  Controller1.ButtonA.pressed(turbocode); // MORE BETA CODE 
-
-  /*
-  // BETA TURBO CODE
-  if(Controller1.ButtonR1.pressing() == true && turboModeActive == false){
-    currentMaxRotationSpeed = TurboRotationSpeed; // Sets current rotation speed to turbo value
-    currentMaxTranslationSpeed = TurboTranslationSpeed; // Sets current translation speed to turbo value
-    turboModeActive = !turboModeActive;
-    Controller1.Screen.clearLine(2);  // DELETE THESE LINES IF CODE IS BREAKING
-    Controller1.Screen.setCursor(2, 1); // DELETE THESE LINES IF CODE IS BREAKING
-    Controller1.Screen.print("TURBO MODE ACTIVE"); // DELETE THESE LINES IF CODE IS BREAKING
-
-  } else if(Controller1.ButtonR1.pressing() == true && turboModeActive == true){
-    currentMaxRotationSpeed = MaxRotationSpeed; // Sets current max rotation speed back to default
-    currentMaxTranslationSpeed = MaxTranslationSpeed; // Sets current translation speed back to default
-    turboModeActive = !turboModeActive;
-    Controller1.Screen.clearLine(2); // DELETE THESE LINES IF CODE IS BREAKING
-  }
-  */
+  Controller1.ButtonR1.pressed(turbocode); // Activate Turbo Mode
 
 }
 
@@ -194,30 +190,37 @@ void autonomous_mode(){
 // Hayden's Testing Code :)
 
 void testingFunction(){
+
+  Controller1.Screen.setCursor(2,1);
+  Controller1.Screen.print(Controller1.Axis3.position(percent));
+  
+  Brain.Screen.print(Brain.Battery.voltage());
+  
+
+}
+
+void setup(){
   Controller1.Screen.clearScreen();
   Controller1.Screen.setCursor(1,1);
   Controller1.Screen.print("Yaseen");
-  //Controller1.Screen.setCursor(2,1);
-  //Controller1.Screen.print(Brain.Battery.voltage());
 
-  //Brain.Screen.clearLine();
-  //Brain.Screen.print("Yaseen");
-  //Brain.Screen.setCursor(1,1);
-  //Brain.Screen.print(Controller1.Axis3.position(percent));
+  Brain.Screen.clearScreen();
+  Brain.Screen.clearLine();
+  Brain.Screen.print("Yaseen <3");
+  Brain.Screen.setCursor(1,1);
 }
-
 
 int main() {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
-
+  setup();
   while(420==420) {
     driveTrainLoop();
 
     buttonControls();
 
     // DELETE THESE LINES IF CODE IS BREAKING
-    testingFunction(); //hayden is messing with this
+    //testingFunction(); //hayden is messing with this
   }
   
 }

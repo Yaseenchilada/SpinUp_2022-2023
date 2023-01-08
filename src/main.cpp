@@ -35,19 +35,21 @@ float TurboTranslationSpeed = 1; // Turbo Translation Speed
 float currentMaxRotationSpeed = MaxRotationSpeed;
 float currentMaxTranslationSpeed = MaxTranslationSpeed;
 
-int conveyor1Speed = 45;
-int conveyor1SpeedTurbo = 85;
-int colorRollerSpeed = 40;
-int colorRollerSpeedTurbo = 80;
+int conveyor1Speed = 45; //Normal Vertical Conveyor Speed 
+int conveyor1SpeedTurbo = 85; //Turbo Vertical Conveyor Speed 
+int colorRollerSpeed = 40; // Normal Intake/ColorRoller Speed
+int colorRollerSpeedTurbo = 80; // Turbo Intake/ColorRoller Speed
 int currentConveyor1Speed = conveyor1Speed;
 int currentcolorRollerSpeed = colorRollerSpeed;
 
 bool turboModeActive = false; // Current Turbo Status
-bool imagedetection = false;
-int flywheelStrength = 100;
+bool imagedetection = false; // BETA IMAGE DETECTION Status
+int flywheelStrength = 100; // Flywheel Strength 
 
 
-void toggleimage(){
+
+
+void toggleimage(){ // Switch to inverse of other varible
   imagedetection = !imagedetection;
 }
 
@@ -74,9 +76,9 @@ void turbocode(){ // BETA TURBO CODE CALLBACK FUNCTION
     currentcolorRollerSpeed = colorRollerSpeedTurbo;
     
     turboModeActive = true;
-    Controller1.Screen.clearLine(3);  // DELETE THESE LINES IF CODE IS BREAKING
-    Controller1.Screen.setCursor(3, 1); // DELETE THESE LINES IF CODE IS BREAKING
-    Controller1.Screen.print("TURBO MODE ACTIVE"); // DELETE THESE LINES IF CODE IS BREAKING
+    Controller1.Screen.clearLine(3);  
+    Controller1.Screen.setCursor(3, 1); 
+    Controller1.Screen.print("TURBO MODE ACTIVE");
 
   } else if(turboModeActive == true){
     currentMaxRotationSpeed = MaxRotationSpeed; // Sets current max rotation speed back to default
@@ -85,7 +87,7 @@ void turbocode(){ // BETA TURBO CODE CALLBACK FUNCTION
     currentcolorRollerSpeed = colorRollerSpeed; 
 
     turboModeActive = false;
-    Controller1.Screen.clearLine(3); // DELETE THESE LINES IF CODE IS BREAKING
+    Controller1.Screen.clearLine(3); 
     Controller1.Screen.clearLine(1);
     
   }
@@ -151,7 +153,7 @@ void buttonControls(){ // Controller Button Actions
   }
 
   else {
-    ColorRoller.setVelocity(0,percent);
+    ColorRoller.setVelocity(0,percent); // 
     Conveyor1.setVelocity(0,percent);
   }
 
@@ -180,18 +182,18 @@ void buttonControls(){ // Controller Button Actions
 
 
   Controller1.ButtonR1.pressed(turbocode); // Activate Turbo Mode
-  Controller1.ButtonDown.pressed(toggleimage);
+  Controller1.ButtonDown.pressed(toggleimage); // Activates Image Detection
 
-  if(Controller1.ButtonLeft.pressing() == true){
+  if(Controller1.ButtonLeft.pressing() == true){ //Decreases flywheel strength
     if(flywheelStrength > 10){
-      flywheelStrength = flywheelStrength - 10;
+      flywheelStrength-=10;
       Controller1.Screen.clearLine(4);
       Controller1.Screen.setCursor(4, 1);
       Controller1.Screen.print(flywheelStrength);
     }
-  } else if(Controller1.ButtonRight.pressing() == true){
+  } else if(Controller1.ButtonRight.pressing() == true){ //Increases flywheel strength
     if(flywheelStrength < 100){
-      flywheelStrength = flywheelStrength + 10;
+      flywheelStrength-=10;
       Controller1.Screen.clearLine(4);
       Controller1.Screen.setCursor(4, 1);
       Controller1.Screen.print(flywheelStrength);
@@ -202,7 +204,7 @@ void buttonControls(){ // Controller Button Actions
 
 
 
-void autonomous_mode(){ 
+void autonomous_mode(){ // not inuse. work in progress. depreciated.
   Controller1.Screen.clearScreen();
   Controller1.Screen.print("Autonomous");
   Brain.Screen.clearScreen();
@@ -217,7 +219,7 @@ void testingFunction(){ // Hayden's Testing Code :)
 }
 
 
-void setup(){
+void setup(){ // Setup Code -- Only Runs Once
   Controller1.Screen.clearScreen();
   Controller1.Screen.setCursor(1,1);
   Controller1.Screen.print("Yaseen");
@@ -233,7 +235,7 @@ void setup(){
 int main() {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
-  setup();
+  setup(); 
 
   while(420==420) {
     driveTrainLoop();
@@ -241,11 +243,16 @@ int main() {
 
     if(imagedetection == true){
       visionDriving();
+      Brain.Screen.setCursor(14, 1);
+      Brain.Screen.print("VISION ON");
+    } else{
+      Brain.Screen.setCursor(14, 1);
+      Brain.Screen.clearLine(14);
+      Brain.Screen.print("VISION ON");
     }
-    //testingFunction(); //hayden is messing with this
-    vexDelay(2);  
 
-    
+    //testingFunction(); //hayden is messing with this // DELETE THESE LINES IF CODE IS BREAKING
+    vexDelay(2);  //delay to limit resources
   }
   
 }

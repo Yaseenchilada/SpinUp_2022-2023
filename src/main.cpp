@@ -27,8 +27,6 @@
  
 using namespace vex;
 
-vex::task mytask;
-
 // VARIABLES
 float MaxRotationSpeed = .55; // Normal Steering Speed no Turbo
 float MaxTranslationSpeed = .80; // Normal Driving Speed no Turbo
@@ -245,7 +243,8 @@ int main() {
       visionDriving();
     }
     //testingFunction(); //hayden is messing with this
-    vexDelay(2);
+    vexDelay(2);  
+
     
   }
   

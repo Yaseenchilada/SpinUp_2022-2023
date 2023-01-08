@@ -23,27 +23,36 @@
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
-
+#include "visionDetection.h"
+ 
 using namespace vex;
 
+vex::task mytask;
+
+// VARIABLES
 float MaxRotationSpeed = .55; // Normal Steering Speed no Turbo
 float MaxTranslationSpeed = .80; // Normal Driving Speed no Turbo
-
 float TurboRotationSpeed = .85; // Turbo Rotation Speed 
 float TurboTranslationSpeed = 1; // Turbo Translation Speed
-
-bool turboModeActive = false; // Current Turbo Status
-bool imagedetection = false;
-
 float currentMaxRotationSpeed = MaxRotationSpeed;
 float currentMaxTranslationSpeed = MaxTranslationSpeed;
 
-float conveyor1Speed = 45;
-float conveyor1SpeedTurbo = 85;
-float colorRollerSpeed = 40;
-float colorRollerSpeedTurbo = 80;
-float currentConveyor1Speed = conveyor1Speed;
-float currentcolorRollerSpeed = colorRollerSpeed;
+int conveyor1Speed = 45;
+int conveyor1SpeedTurbo = 85;
+int colorRollerSpeed = 40;
+int colorRollerSpeedTurbo = 80;
+int currentConveyor1Speed = conveyor1Speed;
+int currentcolorRollerSpeed = colorRollerSpeed;
+
+bool turboModeActive = false; // Current Turbo Status
+bool imagedetection = false;
+int flywheelStrength = 100;
+
+
+void toggleimage(){
+  imagedetection = !imagedetection;
+}
+
 
 float cap(float inputVal, float maxMinVal) { // Cap allow full use of motor range with steering
   if (inputVal > maxMinVal){
@@ -57,6 +66,7 @@ float cap(float inputVal, float maxMinVal) { // Cap allow full use of motor rang
   // if less than min val then return -maxMinVal
   // else return inputVal
 }
+
 
 void turbocode(){ // BETA TURBO CODE CALLBACK FUNCTION
   if(turboModeActive == false){
@@ -82,8 +92,6 @@ void turbocode(){ // BETA TURBO CODE CALLBACK FUNCTION
     
   }
 }
-
-
 
 
 void driveTrainLoop(){ // Controls Drivetrain > Gets Joystick Position & Sets to Motors
@@ -118,9 +126,7 @@ void driveTrainLoop(){ // Controls Drivetrain > Gets Joystick Position & Sets to
 }
 
 
-
 void buttonControls(){ // Controller Button Actions
-
   if(Controller1.ButtonY.pressing() == true) { //This is for Conveyor1 and Intake
     ColorRoller.setVelocity(currentcolorRollerSpeed,percent); // Set Velocity of Intake
     Conveyor1.setVelocity(currentConveyor1Speed,percent); // Set Velocity of Conveyor1
@@ -152,7 +158,7 @@ void buttonControls(){ // Controller Button Actions
   }
 
   if(Controller1.ButtonR2.pressing() == true) { //This is for the Flywheel
-    Flywheel.setVelocity(100,percent); // Set Velocity of Flywheel to 100%
+    Flywheel.setVelocity(flywheelStrength, percent); // Set Velocity of Flywheel to 100%
     Flywheel.spin(forward); // Start Motor
   }
   else {
@@ -176,8 +182,25 @@ void buttonControls(){ // Controller Button Actions
 
 
   Controller1.ButtonR1.pressed(turbocode); // Activate Turbo Mode
+  Controller1.ButtonDown.pressed(toggleimage);
 
+  if(Controller1.ButtonLeft.pressing() == true){
+    if(flywheelStrength > 10){
+      flywheelStrength = flywheelStrength - 10;
+      Controller1.Screen.clearLine(4);
+      Controller1.Screen.setCursor(4, 1);
+      Controller1.Screen.print(flywheelStrength);
+    }
+  } else if(Controller1.ButtonRight.pressing() == true){
+    if(flywheelStrength < 100){
+      flywheelStrength = flywheelStrength + 10;
+      Controller1.Screen.clearLine(4);
+      Controller1.Screen.setCursor(4, 1);
+      Controller1.Screen.print(flywheelStrength);
+    }
+  }
 }
+
 
 
 
@@ -189,17 +212,12 @@ void autonomous_mode(){
 }
 
 
-// Hayden's Testing Code :)
-
-void testingFunction(){
-
+void testingFunction(){ // Hayden's Testing Code :)
   Controller1.Screen.setCursor(2,1);
   Controller1.Screen.print(Controller1.Axis3.position(percent));
-  
   Brain.Screen.print(Brain.Battery.voltage());
-  
-
 }
+
 
 void setup(){
   Controller1.Screen.clearScreen();
@@ -207,21 +225,28 @@ void setup(){
   Controller1.Screen.print("Yaseen");
 
   Brain.Screen.clearScreen();
-  Brain.Screen.clearLine();
-  Brain.Screen.print("Yaseen <3");
   Brain.Screen.setCursor(1,1);
+  Brain.Screen.print("Yaseen <3");
+  Brain.Screen.setCursor(16, 1);
+  Brain.Screen.print("Hayden was here ;)");
 }
+
 
 int main() {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
   setup();
+
   while(420==420) {
     driveTrainLoop();
-
     buttonControls();
-    // DELETE THESE LINES IF CODE IS BREAKING
+
+    if(imagedetection == true){
+      visionDriving();
+    }
     //testingFunction(); //hayden is messing with this
+    vexDelay(2);
+    
   }
   
 }

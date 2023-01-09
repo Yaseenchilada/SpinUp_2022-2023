@@ -18,7 +18,7 @@ motor Conveyor1 = motor(PORT7, ratio18_1, true);
 motor Conveyor2 = motor(PORT8, ratio18_1, false);
 controller Controller1 = controller(primary);
 /*vex-vision-config:begin*/
-signature ColorSensor__DISC = signature (1, 317, 881, 600, -5461, -4853, -5158, 3, 0);
+signature ColorSensor__DISC = signature (1, 2443, 3171, 2807, -3905, -3439, -3672, 3, 0);
 vision ColorSensor = vision (PORT9, 50, ColorSensor__DISC);
 /*vex-vision-config:end*/
 

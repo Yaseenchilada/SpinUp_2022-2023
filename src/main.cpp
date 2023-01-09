@@ -104,7 +104,6 @@ void turbocode(){ // BETA TURBO CODE CALLBACK FUNCTION
     currentConveyor2Speed = conveyor2SpeedTurbo;
     
     turboModeActive = true;
-    // Display to Controller Screen
     Controller1.Screen.clearLine(3);  
     Controller1.Screen.setCursor(3, 1); 
     Controller1.Screen.print("TURBO MODE ACTIVE");
@@ -117,15 +116,9 @@ void turbocode(){ // BETA TURBO CODE CALLBACK FUNCTION
     currentConveyor2Speed = conveyor2Speed;
 
     turboModeActive = false;
-<<<<<<< HEAD
     Controller1.Screen.clearLine(3);
     Controller1.Screen.setCursor(3, 1);
     Controller1.Screen.print(" ");
-=======
-    // Display to Controller Screen
-    Controller1.Screen.clearLine(3); 
-    Controller1.Screen.clearLine(1);
->>>>>>> 7598a9c36313943ddf4cfb4a12af62ecad396601
     
   }
 }
@@ -144,16 +137,16 @@ void driveTrainLoop(){ // Controls Drivetrain > Gets Joystick Position & Sets to
   float drivetrainMax = 100 - fabsf(sA); // Max motor movement given steering is constant
 
   // Set Motor Velocity with Steering Prioritized with 
-  float FL_motor_command = sA + cap(vA + hA, drivetrainMax); // Front Left Motor
-  float BL_motor_command = sA + cap(vA + -hA, drivetrainMax); // Back Left Motor
-  float FR_motor_command = -sA + cap(vA + -hA, drivetrainMax); // Front Right Motor
-  float BR_motor_command = -sA + cap(vA + hA, drivetrainMax); // Back Right Motor
+  float FL_motor_command = sA + cap(vA + hA, drivetrainMax);
+  float BL_motor_command = sA + cap(vA + -hA, drivetrainMax);
+  float FR_motor_command = -sA + cap(vA + -hA, drivetrainMax);
+  float BR_motor_command = -sA + cap(vA + hA, drivetrainMax);
 
   // Assign Proper Velocity for Each Motor
-  FrontLeft.setVelocity(FL_motor_command, percent); // Assign Velocity to Front Left Motor
-  BackLeft.setVelocity(BL_motor_command, percent); // Assign Velocity to Back Left Motor
-  FrontRight.setVelocity(FR_motor_command, percent); // Assign Velocity to Front Right Motor
-  BackRight.setVelocity(BR_motor_command, percent); // Assign Velocity to Back Right Motor
+  FrontLeft.setVelocity(FL_motor_command, percent);
+  BackLeft.setVelocity(BL_motor_command, percent);
+  FrontRight.setVelocity(FR_motor_command, percent);
+  BackRight.setVelocity(BR_motor_command, percent);
 
   // Start Motors
   FrontLeft.spin(forward);
@@ -178,7 +171,7 @@ void buttonControls(){ // Controller Button Actions
     Conveyor1.spin(forward); // Start Motor
   }
 
-  else if (Controller1.ButtonB.pressing() == true) { // This is for colorroller and BETA YASEEN CODE
+  else if (Controller1.ButtonB.pressing() == true) {
     Conveyor1.setVelocity(0,percent); // 
 
     if (ColorSensor.objects[0].width >= 120) { // if the first object detected in the vision sensor is wider than 120, then stop the motor
@@ -190,7 +183,7 @@ void buttonControls(){ // Controller Button Actions
   }
 
   else {
-    ColorRoller.setVelocity(0,percent);
+    ColorRoller.setVelocity(0,percent); // 
     Conveyor1.setVelocity(0,percent);
   }
 
@@ -221,14 +214,14 @@ void buttonControls(){ // Controller Button Actions
   Controller1.ButtonR1.pressed(turbocode); // Activate Turbo Mode
   Controller1.ButtonDown.pressed(toggleimage); // Activates Image Detection
 
-  if(Controller1.ButtonLeft.pressing() == true){ // Decreases flywheel strength
+  if(Controller1.ButtonLeft.pressing() == true){ //Decreases flywheel strength
     if(flywheelStrength > 10){
       flywheelStrength-=10;
       Controller1.Screen.clearLine(2);
       Controller1.Screen.setCursor(2, 1);
       Controller1.Screen.print(flywheelStrength);
     }
-  } else if(Controller1.ButtonRight.pressing() == true){ // Increases flywheel strength
+  } else if(Controller1.ButtonRight.pressing() == true){ //Increases flywheel strength
     if(flywheelStrength < 100){
       flywheelStrength+=10;
       Controller1.Screen.clearLine(2);
@@ -271,19 +264,13 @@ void setup(){ // Setup Code -- Only Runs Once
 int main() {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
-<<<<<<< HEAD
   setup(); 
   imagedetection = false;
-=======
-  setup(); // Runs Initial Setup Code Once
-
->>>>>>> 7598a9c36313943ddf4cfb4a12af62ecad396601
   while(420==420) {
-    driveTrainLoop(); // Mapping Controller Joysticks to Motor
-    buttonControls(); // Controller Button Presses to Outputs
+    driveTrainLoop();
+    buttonControls();
 
     if(imagedetection == true){
-<<<<<<< HEAD
       visionDriving();
       Brain.Screen.setCursor(12, 1);
       Brain.Screen.print("VISION ON");
@@ -291,15 +278,6 @@ int main() {
       Brain.Screen.clearLine(12);
       Brain.Screen.setCursor(12, 1);
       Brain.Screen.print("VISION OFF");
-=======
-      visionDriving(); // Testing Function in other file
-      Brain.Screen.setCursor(14, 1); 
-      Brain.Screen.print("VISION ON"); // Print to Brain Screen
-    } else{
-      Brain.Screen.setCursor(14, 1);
-      Brain.Screen.clearLine(14);
-      Brain.Screen.print("VISION ON"); // Print to Brain Screen
->>>>>>> 7598a9c36313943ddf4cfb4a12af62ecad396601
     }
 
     //testingFunction(); //hayden is messing with this // DELETE THESE LINES IF CODE IS BREAKING

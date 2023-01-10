@@ -1,17 +1,3 @@
-// ---- START VEXCODE CONFIGURED DEVICES ----
-// Robot Configuration:
-// [Name]               [Type]        [Port(s)]
-// FrontLeft            motor         1               
-// BackLeft             motor         3               
-// FrontRight           motor         2               
-// BackRight            motor         4               
-// Flywheel             motor         5               
-// ColorRoller          motor         6               
-// Conveyor1            motor         7               
-// Conveyor2            motor         8               
-// Controller1          controller                    
-// ColorSensor          vision        9               
-// ---- END VEXCODE CONFIGURED DEVICES ----
 /*----------------------------------------------------------------------------*/
 /*                                                                            */
 /*    Module:       main.cpp                                                  */
@@ -64,7 +50,7 @@ int flywheelStrength = 100; // Flywheel Strength
 
 bool turboModeActive = false; // Current Turbo Status
 bool imagedetection = false; // BETA IMAGE DETECTION Status
-bool autonoumousActive = false; 
+bool autonoumousActive = false; // autonmous active status
 
 
 int visionDriving(){
@@ -93,43 +79,43 @@ task visionCamTask = task(visionDriving);
 void toggleimage(){ // Switch to inverse of other varible
   imagedetection = !imagedetection;
   
-  Brain.Screen.clearLine(12);
+  Brain.Screen.clearLine(12); // set cursor on the brain screen to line 12
   Brain.Screen.setCursor(12, 1);
   if(imagedetection == true){
-    Brain.Screen.print("VISION ON");
-    visionCamTask.resume();
+    Brain.Screen.print("VISION ON"); // 
+    visionCamTask.resume(); // resume the task
   }else{
-    Brain.Screen.print("VISION OFF");
-    visionCamTask.suspend();
+    Brain.Screen.print("VISION OFF"); // display vision is off 
+    visionCamTask.suspend(); // testing this suspend method
   }
 }
 
 
-int autonomous_mode(){ // not inuse. work in progress. depreciated.
+int autonomous_mode(){ // not inuse. work in progress.
   Brain.Screen.clearScreen();
   Brain.Screen.print("Autonomous Active");
-  for(int i = 0; i < 10; i++){
+  for(int i = 0; i < 10; i++){ // loops through lines on the screen to prove that it is working
     Brain.Screen.setCursor(i+1, 1);
     Brain.Screen.print("Bob %d", i);
     wait(3,sec);
   }
-  return 0;
+  return 0; // returns valid and complete
 }
 
-task autonomousModeTask = task(autonomous_mode);
+task autonomousModeTask = task(autonomous_mode); // setup task of autonomous 
 
-void toggleAutonomous(){
-  autonoumousActive = !autonoumousActive;
-  if(autonoumousActive == true){
-    autonomousModeTask.resume();
-    Controller1.Screen.setCursor(3, 1);
+void toggleAutonomous(){ // toggles the autonomous boolean to the opposite and starts the task of autonomous
+  autonoumousActive = !autonoumousActive; // inverts the boolean
+  if(autonoumousActive == true){ 
+    autonomousModeTask.resume(); // start autonoumous task
+    Controller1.Screen.setCursor(3, 1); 
     Controller1.Screen.clearLine(3);
-    Controller1.Screen.print("Autonomous On");
+    Controller1.Screen.print("Autonomous On"); // display active to controller screen
   } else{
-    autonomousModeTask.stop();
+    autonomousModeTask.stop(); // stop autonoumous task
     Controller1.Screen.setCursor(3, 1);
     Controller1.Screen.clearLine(3);
-    Controller1.Screen.print("Autonomous Off");
+    Controller1.Screen.print("Autonomous Off"); // display stop to controller screen
   }
 }
 
@@ -230,7 +216,6 @@ int buttonControls(){ // Controller Button Actions
   }
 
   else if (Controller1.ButtonB.pressing() == true) {
-    Conveyor1.setVelocity(0,percent); // 
     ColorSensor.takeSnapshot(ColorSensor__DISC); //CHANGE SIGNATURE
     if (ColorSensor.objectCount > 0) {
       ColorRoller.setVelocity(0,percent);
@@ -241,7 +226,7 @@ int buttonControls(){ // Controller Button Actions
   }
 
   else {
-    ColorRoller.setVelocity(0,percent); // 
+    ColorRoller.setVelocity(0,percent); // otherwise stop motors
     Conveyor1.setVelocity(0,percent);
   }
 
@@ -273,6 +258,7 @@ int buttonControls(){ // Controller Button Actions
   Controller1.ButtonDown.pressed(toggleimage); // Activates Image Detection
   Controller1.ButtonA.pressed(toggleAutonomous);
 
+
   if(Controller1.ButtonLeft.pressing() == true){ //Decreases flywheel strength
     if(flywheelStrength > 10){
       flywheelStrength-=10;
@@ -296,13 +282,6 @@ int buttonControls(){ // Controller Button Actions
 }
 
 
-void testingFunction(){ // Hayden's Testing Code :)
-  Controller1.Screen.setCursor(2,1);
-  Controller1.Screen.print(Controller1.Axis3.position(percent));
-  Brain.Screen.print(Brain.Battery.voltage());
-}
-
-
 void setup(){ // Setup Code -- Only Runs Once
   Controller1.Screen.clearScreen();
   Controller1.Screen.setCursor(1,1);
@@ -318,12 +297,11 @@ void setup(){ // Setup Code -- Only Runs Once
 int main() {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
-  setup(); 
-  task driveTrainLoopTask = task(driveTrainLoop);
-  task buttonControlsTask = task(buttonControls);
+  setup();
+  task driveTrainLoopTask = task(driveTrainLoop); // Task for drive train
+  task buttonControlsTask = task(buttonControls); // Task for controller button presses
   
   while(420==420) {
-    //testingFunction(); //hayden is messing with this // DELETE THESE LINES IF CODE IS BREAKING
     vexDelay(2);  //delay to limit resources
   }
   

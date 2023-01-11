@@ -52,24 +52,33 @@ bool turboModeActive = false; // Current Turbo Status
 bool imagedetection = false; // BETA IMAGE DETECTION Status
 bool autonoumousActive = false; // autonmous active status
 
+int objectCenter = 110;
 
 int visionDriving(){
-  while(imagedetection == true){
-  ColorSensor.setLedColor(0, 0, 255);
+  Brain.Screen.setCursor(5, 1);
+  Brain.Screen.print("WORKINGS?");
+  while(420 == 420){
   ColorSensor.takeSnapshot(ColorSensor__DISC);
   if (ColorSensor.objectCount > 0){
+    ColorSensor.setLedColor(0, 255, 0);
     Brain.Screen.clearLine(3);
     Brain.Screen.setCursor(3, 1);
     Brain.Screen.print("Detected Object");
     Brain.Screen.setCursor(4, 1);
-    Brain.Screen.print(ColorSensor.objects[0].angle);
+    Brain.Screen.print(ColorSensor.largestObject.centerX);
+    objectCenter = ColorSensor.largestObject.centerX;
+    Controller1.Screen.clearLine(1);
+    Controller1.Screen.setCursor(1,1);
+    Controller1.Screen.print(ColorSensor.largestObject.centerX);
+
   }else{
+    ColorSensor.setLedColor(255, 0, 0);
     Brain.Screen.clearLine(3);
     Brain.Screen.setCursor(2, 1);
     Brain.Screen.print("Detected not Object");
     Brain.Screen.clearLine(4);
   }
-  wait(2, sec);
+  wait(300, msec);
   }
   return 0;
 }
@@ -77,16 +86,20 @@ task visionCamTask = task(visionDriving);
 
 
 void toggleimage(){ // Switch to inverse of other varible
-  imagedetection = !imagedetection;
-  
-  Brain.Screen.clearLine(12); // set cursor on the brain screen to line 12
-  Brain.Screen.setCursor(12, 1);
-  if(imagedetection == true){
+
+  if(imagedetection == false){
+    Brain.Screen.clearLine(10); // set cursor on the brain screen to line 12
+    Brain.Screen.setCursor(10, 1);
     Brain.Screen.print("VISION ON"); // 
     visionCamTask.resume(); // resume the task
-  }else{
+    imagedetection = true;
+    
+  }else if(imagedetection == true){
+    Brain.Screen.clearLine(10); // set cursor on the brain screen to line 12
+    Brain.Screen.setCursor(9, 1);
     Brain.Screen.print("VISION OFF"); // display vision is off 
     visionCamTask.suspend(); // testing this suspend method
+    imagedetection = false;
   }
 }
 
@@ -94,10 +107,42 @@ void toggleimage(){ // Switch to inverse of other varible
 int autonomous_mode(){ // not inuse. work in progress.
   Brain.Screen.clearScreen();
   Brain.Screen.print("Autonomous Active");
-  for(int i = 0; i < 10; i++){ // loops through lines on the screen to prove that it is working
-    Brain.Screen.setCursor(i+1, 1);
-    Brain.Screen.print("Bob %d", i);
-    wait(3,sec);
+  float FL_motor_command;
+  float BL_motor_command;
+  float FR_motor_command;
+  float BR_motor_command;
+  Brain.Screen.clearScreen(1);
+  Brain.Screen.setCursor(1, 1);
+  Brain.Screen.print(objectCenter);
+  while(true){
+    if (objectCenter > 160){
+      FL_motor_command = -25;
+      BL_motor_command = -25;
+      FR_motor_command = 25;
+      BR_motor_command = 25;
+    } else if (objectCenter < 70){
+      FL_motor_command = -25;
+      BL_motor_command = -25;
+      FR_motor_command = 25;
+      BR_motor_command = 25;
+    } else{
+      FL_motor_command = 25;
+      BL_motor_command = 25;
+      FR_motor_command = 25;
+      BR_motor_command = 25;
+    }
+      // Assign Proper Velocity for Each Motor
+    FrontLeft.setVelocity(FL_motor_command, percent);
+    BackLeft.setVelocity(BL_motor_command, percent);
+    FrontRight.setVelocity(FR_motor_command, percent);
+    BackRight.setVelocity(BR_motor_command, percent);
+
+  // Start Motors
+    FrontLeft.spin(forward);
+    FrontRight.spin(forward);
+    BackLeft.spin(forward);
+    BackRight.spin(forward);
+    wait(25, sec);
   }
   return 0; // returns valid and complete
 }
@@ -105,17 +150,18 @@ int autonomous_mode(){ // not inuse. work in progress.
 task autonomousModeTask = task(autonomous_mode); // setup task of autonomous 
 
 void toggleAutonomous(){ // toggles the autonomous boolean to the opposite and starts the task of autonomous
-  autonoumousActive = !autonoumousActive; // inverts the boolean
-  if(autonoumousActive == true){ 
+  if(autonoumousActive == false){ 
     autonomousModeTask.resume(); // start autonoumous task
-    Controller1.Screen.setCursor(3, 1); 
-    Controller1.Screen.clearLine(3);
+    Controller1.Screen.setCursor(2, 1); 
+    Controller1.Screen.clearLine(2);
     Controller1.Screen.print("Autonomous On"); // display active to controller screen
+    autonoumousActive = true;
   } else{
-    autonomousModeTask.stop(); // stop autonoumous task
-    Controller1.Screen.setCursor(3, 1);
-    Controller1.Screen.clearLine(3);
+    autonomousModeTask.suspend(); // stop autonoumous task
+    Controller1.Screen.setCursor(2, 1);
+    Controller1.Screen.clearLine(2);
     Controller1.Screen.print("Autonomous Off"); // display stop to controller screen
+    autonoumousActive = false;
   }
 }
 
@@ -181,7 +227,7 @@ int driveTrainLoop(){ // Controls Drivetrain > Gets Joystick Position & Sets to 
   float BL_motor_command = sA + cap(vA + -hA, drivetrainMax);
   float FR_motor_command = -sA + cap(vA + -hA, drivetrainMax);
   float BR_motor_command = -sA + cap(vA + hA, drivetrainMax);
-
+  if (autonoumousActive == false){
   // Assign Proper Velocity for Each Motor
   FrontLeft.setVelocity(FL_motor_command, percent);
   BackLeft.setVelocity(BL_motor_command, percent);
@@ -193,6 +239,8 @@ int driveTrainLoop(){ // Controls Drivetrain > Gets Joystick Position & Sets to 
   FrontRight.spin(forward);
   BackLeft.spin(forward);
   BackRight.spin(forward);
+  }
+
   wait(25,msec);
   }
   return 0;
@@ -245,7 +293,7 @@ int buttonControls(){ // Controller Button Actions
   }
 
   else if(Controller1.ButtonL1.pressing() == true) { //This is for Conveyor2 Reverse
-    Conveyor2.setVelocity(currentConveyor2Speed,percent); // Set Velocity
+    Conveyor2.setVelocity(-currentConveyor2Speed,percent); // Set Velocity
     Conveyor2.spin(forward); // Start Motor
 
   } 
@@ -282,7 +330,12 @@ int buttonControls(){ // Controller Button Actions
 }
 
 
+
+
+
 void setup(){ // Setup Code -- Only Runs Once
+  autonomousModeTask.suspend();
+  //visionCamTask.suspend();
   Controller1.Screen.clearScreen();
   Controller1.Screen.setCursor(1,1);
   Controller1.Screen.print("Yaseen");
@@ -302,7 +355,7 @@ int main() {
   task buttonControlsTask = task(buttonControls); // Task for controller button presses
   
   while(420==420) {
-    vexDelay(2);  //delay to limit resources
+    vexDelay(25);  //delay to limit resources
   }
   
 }

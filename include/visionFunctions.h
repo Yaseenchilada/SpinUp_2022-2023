@@ -3,6 +3,8 @@
 
 //Declarations
 
-int visionDrive(int objectCenter);
+int visionDetection(int objectCenter);
+int visionDriving(int objectCenter);
+
 
 #endif

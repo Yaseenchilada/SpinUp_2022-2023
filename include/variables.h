@@ -20,7 +20,7 @@ int currentConveyor2Speed = conveyor2Speed;
 int flywheelStrength = 100; // Flywheel Strength 
 
 bool turboModeActive = false; // Current Turbo Status
-bool imagedetection = false; // BETA IMAGE DETECTION Status
+bool visionDrivingActive = false; // BETA IMAGE DETECTION Status
 bool autonoumousActive = false; // autonmous active status
 
 int objectCenter = 110;

@@ -11,7 +11,7 @@ Brain Screen Lines Being Used
 6.
 7.
 8. Object Center
-9.
+9. hi autumn
 10. Vision ON OR OFF - line 45 &
 11. Autonomous Active - line 62
 12.

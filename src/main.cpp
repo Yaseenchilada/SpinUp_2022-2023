@@ -31,79 +31,51 @@
 using namespace vex;
 
 
-int visiondrivetesting(){
-  visionDrive(objectCenter);
+int visionDetectionCallback(){
+  visionDetection(objectCenter);
   return 0;
 }
+task visionCamTask = task(visionDetectionCallback);
 
-task visionCamTask = task(visiondrivetesting);
+int visionDrivingCallback(){
+  visionDriving(objectCenter);
+  return 0;
+}
+task visionDrivingTask = task(visionDrivingCallback);
 
 void toggleimage(){ // Switch to inverse of other varible
-  if(imagedetection == false){ 
+  if(visionDrivingActive == false){ 
     Brain.Screen.clearLine(10); // set cursor on the brain screen to line 12
     Brain.Screen.setCursor(10, 1);
     Brain.Screen.print("VISION ON"); // 
     Controller1.Screen.clearLine(1); // set cursor on the brain screen to line 12
     Controller1.Screen.setCursor(1, 1);
     Controller1.Screen.print("VISION ON"); // 
-    visionCamTask.resume(); // resume the task
-    imagedetection = true;
-  }else if(imagedetection == true){
-    
+    visionDrivingTask.resume(); // resume the task
+
+    visionDrivingActive = true;
+  }else if(visionDrivingActive == true){
     Brain.Screen.clearLine(10); // set cursor on the brain screen to line 12
     Brain.Screen.setCursor(10, 1);
     Brain.Screen.print("VISION OFF"); // display vision is off 
     Controller1.Screen.clearLine(1); // set cursor on the brain screen to line 12
     Controller1.Screen.setCursor(1, 1);
     Controller1.Screen.print("VISION OFF"); // 
-    visionCamTask.suspend(); // testing this suspend method
-    imagedetection = false;
+    visionDrivingTask.suspend(); // testing this suspend method
+    visionDrivingActive = false;
   }
 }
 
 
 int autonomous_mode(){ // not inuse. work in progress.
-  wait(2, sec);
-  Brain.Screen.setCursor(8,1);
-  Brain.Screen.print("object center: %d",objectCenter);
-  float FL_motor_command;
-  float BL_motor_command;
-  float FR_motor_command;
-  float BR_motor_command;
+  wait(2, sec); // Inital Delay to not mess other stuff
   while(true){
-    if (objectCenter > 160){
-      FL_motor_command = -25;
-      BL_motor_command = -25;
-      FR_motor_command = 25;
-      BR_motor_command = 25;
-    } else if (objectCenter < 70){
-      FL_motor_command = -25;
-      BL_motor_command = -25;
-      FR_motor_command = 25;
-      BR_motor_command = 25;
-    } else{
-      FL_motor_command = 25;
-      BL_motor_command = 25;
-      FR_motor_command = 25;
-      BR_motor_command = 25;
-    }
-      // Assign Proper Velocity for Each Motor
-    FrontLeft.setVelocity(FL_motor_command, percent);
-    BackLeft.setVelocity(BL_motor_command, percent);
-    FrontRight.setVelocity(FR_motor_command, percent);
-    BackRight.setVelocity(BR_motor_command, percent);
-
-  // Start Motors
-    FrontLeft.spin(forward);
-    FrontRight.spin(forward);
-    BackLeft.spin(forward);
-    BackRight.spin(forward);
-    wait(2, sec);
+    Brain.Screen.setCursor(9,1);
+    Brain.Screen.print("hi autumn");
    
   }
   return 0; // returns valid and complete
 }
-
 task autonomousModeTask = task(autonomous_mode); // setup task of autonomous 
 
 void toggleAutonomous(){ // toggles the autonomous boolean to the opposite and starts the task of autonomous
@@ -117,8 +89,6 @@ void toggleAutonomous(){ // toggles the autonomous boolean to the opposite and s
     Brain.Screen.clearLine(11);
     Brain.Screen.setCursor(11, 1); 
     Brain.Screen.print("Autonomous On"); // display active to controller screen
-
-    
   } else if(autonoumousActive == true){
     autonomousModeTask.suspend(); // stop autonoumous task
     Controller1.Screen.clearLine(2);
@@ -132,9 +102,6 @@ void toggleAutonomous(){ // toggles the autonomous boolean to the opposite and s
 }
 
 
-
-
-
 void turbocode(){ // BETA TURBO CODE CALLBACK FUNCTION
   if(turboModeActive == false){
     currentMaxRotationSpeed = TurboRotationSpeed; // Sets current rotation speed to turbo value
@@ -142,8 +109,8 @@ void turbocode(){ // BETA TURBO CODE CALLBACK FUNCTION
     currentConveyor1Speed = conveyor1SpeedTurbo;
     currentcolorRollerSpeed = colorRollerSpeedTurbo;
     currentConveyor2Speed = conveyor2SpeedTurbo;
-    
     turboModeActive = true;
+
     Controller1.Screen.clearLine(3);  
     Controller1.Screen.setCursor(3, 1); 
     Controller1.Screen.print("TURBO MODE ACTIVE");
@@ -154,12 +121,11 @@ void turbocode(){ // BETA TURBO CODE CALLBACK FUNCTION
     currentConveyor1Speed = conveyor1Speed;
     currentcolorRollerSpeed = colorRollerSpeed; 
     currentConveyor2Speed = conveyor2Speed;
-
     turboModeActive = false;
+
     Controller1.Screen.clearLine(3);
     Controller1.Screen.setCursor(3, 1);
     Controller1.Screen.print(" ");
-    
   }
 }
 
@@ -182,13 +148,12 @@ int driveTrainLoop(){ // Controls Drivetrain > Gets Joystick Position & Sets to 
   float BL_motor_command = sA + cap(vA + -hA, drivetrainMax);
   float FR_motor_command = -sA + cap(vA + -hA, drivetrainMax);
   float BR_motor_command = -sA + cap(vA + hA, drivetrainMax);
-  if (autonoumousActive == false){
+  if (autonoumousActive == false && visionDrivingActive == false){
   // Assign Proper Velocity for Each Motor
   FrontLeft.setVelocity(FL_motor_command, percent);
   BackLeft.setVelocity(BL_motor_command, percent);
   FrontRight.setVelocity(FR_motor_command, percent);
   BackRight.setVelocity(BR_motor_command, percent);
-
   // Start Motors
   FrontLeft.spin(forward);
   FrontRight.spin(forward);
@@ -209,35 +174,28 @@ int buttonControls(){ // Controller Button Actions
     Conveyor1.setVelocity(currentConveyor1Speed,percent); // Set Velocity of Conveyor1
     ColorRoller.spin(forward); // Start Motor
     Conveyor1.spin(forward); // Start Motor
-  }
-  
-  else if(Controller1.ButtonX.pressing() == true) { // This is for Conveyor1 and Intake Rejection
+  } else if(Controller1.ButtonX.pressing() == true) { // This is for Conveyor1 and Intake Rejection
     ColorRoller.setVelocity(-currentcolorRollerSpeed,percent); // Set Velocity of Intake
     Conveyor1.setVelocity(-currentConveyor1Speed,percent); // Set Velocity of Conveyor1
     ColorRoller.spin(forward); // Start Motor 
     Conveyor1.spin(forward); // Start Motor
-  }
-
-  else if (Controller1.ButtonB.pressing() == true) {
+  } else if (Controller1.ButtonB.pressing() == true) {
     ColorSensor.takeSnapshot(ColorSensor__DISC); //CHANGE SIGNATURE
     if (ColorSensor.objectCount > 0) {
       ColorRoller.setVelocity(0,percent);
-    }
-    else { // otherwise run the motor
+    } else { // otherwise run the motor
       ColorRoller.setVelocity(20,percent);
     }
-  }
-
-  else {
+} else {
     ColorRoller.setVelocity(0,percent); // otherwise stop motors
     Conveyor1.setVelocity(0,percent);
   }
 
+
   if(Controller1.ButtonR2.pressing() == true) { //This is for the Flywheel
     Flywheel.setVelocity(flywheelStrength, percent); // Set Velocity of Flywheel to 100%
     Flywheel.spin(forward); // Start Motor
-  }
-  else {
+  } else {
     Flywheel.setVelocity(0,percent); // Stop Motor Velocity
   }
 
@@ -245,21 +203,17 @@ int buttonControls(){ // Controller Button Actions
   if(Controller1.ButtonL2.pressing() == true) { //This is for Conveyor2 Forwards
     Conveyor2.setVelocity(currentConveyor2Speed,percent); // Set Velocity
     Conveyor2.spin(forward); // Start Motor
-  }
-
-  else if(Controller1.ButtonL1.pressing() == true) { //This is for Conveyor2 Reverse
+  } else if(Controller1.ButtonL1.pressing() == true) { //This is for Conveyor2 Reverse
     Conveyor2.setVelocity(-currentConveyor2Speed,percent); // Set Velocity
     Conveyor2.spin(forward); // Start Motor
-
-  } 
-  else {
+  } else {
     Conveyor2.setVelocity(0,percent); // Stop Motor Velocity 
   }
 
 
   Controller1.ButtonR1.pressed(turbocode); // Activate Turbo Mode
   Controller1.ButtonUp.pressed(toggleimage); // Activates Image Detection
-  Controller1.ButtonA.pressed(toggleAutonomous);
+  Controller1.ButtonDown.pressed(toggleAutonomous); // Activates Autonomous
 
 
   if(Controller1.ButtonLeft.pressing() == true){ //Decreases flywheel strength
@@ -285,16 +239,17 @@ int buttonControls(){ // Controller Button Actions
 }
 
 
-
-
-
 void setup(){ // Setup Code -- Only Runs Once
   autonomousModeTask.suspend();
+  visionDrivingTask.suspend();
+  task driveTrainLoopTask = task(driveTrainLoop); // Task for drive train
+  task buttonControlsTask = task(buttonControls); // Task for controller button presses
+  // Screen Setup
   Controller1.Screen.clearScreen();
   Brain.Screen.drawImageFromFile("yaseencute.png", 1, 1);
   Brain.Screen.setCursor(1,1);
   Brain.Screen.setFillColor(vex::color(0,0,0));
-  Brain.Screen.print("Programming by Hayden <3  (╯°□°）╯︵ ┻━┻)");
+  Brain.Screen.print("Programming by Hayden <3 <o/");
 }
 
 
@@ -302,20 +257,13 @@ int main() {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
   setup();
-  
-  task driveTrainLoopTask = task(driveTrainLoop); // Task for drive train
-  task buttonControlsTask = task(buttonControls); // Task for controller button presses
-  
-  //vex::Gif gif("kanye.gif", 270, 120); 
-  //int count=0;
+  vex::Gif gif("kanye.gif", 270, 120); 
+  int count=0;
   while(420==420) {
-    //Brain.Screen.printAt(0,0, "render %d", count++);
-    //Brain.Screen.render();
-    Brain.Screen.setCursor(4,1);
-    Brain.Screen.print(imagedetection);
+    Brain.Screen.printAt(0,0, "render %d", count++);
+    Brain.Screen.render();
     vexDelay(50);  //delay to limit resources
   }
-  
 }
 
 // created by yaseen and hayden. the best

@@ -1,0 +1,22 @@
+Brain Screen Size (480,240)
+Vision Sensor (316, 212)
+
+
+Brain Screen Lines Being Used
+1. Prints Programmed by Hayden - line 282
+2. Object Detected - visionFunction - line 16 & 27
+3. 
+4.
+5. VISION DIRIVNG "WORKING" - line 11
+6.
+7.
+8. Object Center
+9.
+10. Vision ON OR OFF - line 45 &
+11. Autonomous Active - line 62
+12.
+
+Controller Screen Lines Being Used
+1. ColorSensor LargestObject.centerX && VISION ON
+2. Autonomous Active - line 107 & line 113
+3. Turbo Mode Active - line 133 & line 145

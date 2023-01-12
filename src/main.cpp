@@ -23,81 +23,39 @@
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
+#include "gifclass.h"
+#include "visionFunctions.h"
+#include "calculations.h"
+#include "variables.h"
 
- 
 using namespace vex;
 
-// VARIABLES
-float MaxRotationSpeed = .55; // Normal Steering Speed no Turbo
-float MaxTranslationSpeed = .80; // Normal Driving Speed no Turbo
-float TurboRotationSpeed = .85; // Turbo Rotation Speed 
-float TurboTranslationSpeed = 1; // Turbo Translation Speed
-float currentMaxRotationSpeed = MaxRotationSpeed;
-float currentMaxTranslationSpeed = MaxTranslationSpeed;
 
-int conveyor1Speed = 45; //Normal Vertical Conveyor Speed 
-int conveyor1SpeedTurbo = 85; //Turbo Vertical Conveyor Speed 
-int colorRollerSpeed = 40; // Normal Intake/ColorRoller Speed
-int colorRollerSpeedTurbo = 80; // Turbo Intake/ColorRoller Speed
-int currentConveyor1Speed = conveyor1Speed;
-int currentcolorRollerSpeed = colorRollerSpeed;
- 
-int conveyor2Speed = 75;
-int conveyor2SpeedTurbo = 100;
-int currentConveyor2Speed = conveyor2Speed;
-
-int flywheelStrength = 100; // Flywheel Strength 
-
-bool turboModeActive = false; // Current Turbo Status
-bool imagedetection = false; // BETA IMAGE DETECTION Status
-bool autonoumousActive = false; // autonmous active status
-
-int objectCenter = 110;
-
-int visionDriving(){
-  Brain.Screen.setCursor(5, 1);
-  Brain.Screen.print("WORKINGS?");
-  while(420 == 420){
-  ColorSensor.takeSnapshot(ColorSensor__DISC);
-  if (ColorSensor.objectCount > 0){
-    ColorSensor.setLedColor(0, 255, 0);
-    Brain.Screen.clearLine(3);
-    Brain.Screen.setCursor(3, 1);
-    Brain.Screen.print("Detected Object");
-    Brain.Screen.setCursor(4, 1);
-    Brain.Screen.print(ColorSensor.largestObject.centerX);
-    objectCenter = ColorSensor.largestObject.centerX;
-    Controller1.Screen.clearLine(1);
-    Controller1.Screen.setCursor(1,1);
-    Controller1.Screen.print(ColorSensor.largestObject.centerX);
-
-  }else{
-    ColorSensor.setLedColor(255, 0, 0);
-    Brain.Screen.clearLine(3);
-    Brain.Screen.setCursor(2, 1);
-    Brain.Screen.print("Detected not Object");
-    Brain.Screen.clearLine(4);
-  }
-  wait(300, msec);
-  }
+int visiondrivetesting(){
+  visionDrive(objectCenter);
   return 0;
 }
-task visionCamTask = task(visionDriving);
 
+task visionCamTask = task(visiondrivetesting);
 
 void toggleimage(){ // Switch to inverse of other varible
-
-  if(imagedetection == false){
+  if(imagedetection == false){ 
     Brain.Screen.clearLine(10); // set cursor on the brain screen to line 12
     Brain.Screen.setCursor(10, 1);
     Brain.Screen.print("VISION ON"); // 
+    Controller1.Screen.clearLine(1); // set cursor on the brain screen to line 12
+    Controller1.Screen.setCursor(1, 1);
+    Controller1.Screen.print("VISION ON"); // 
     visionCamTask.resume(); // resume the task
     imagedetection = true;
-    
   }else if(imagedetection == true){
+    
     Brain.Screen.clearLine(10); // set cursor on the brain screen to line 12
-    Brain.Screen.setCursor(9, 1);
+    Brain.Screen.setCursor(10, 1);
     Brain.Screen.print("VISION OFF"); // display vision is off 
+    Controller1.Screen.clearLine(1); // set cursor on the brain screen to line 12
+    Controller1.Screen.setCursor(1, 1);
+    Controller1.Screen.print("VISION OFF"); // 
     visionCamTask.suspend(); // testing this suspend method
     imagedetection = false;
   }
@@ -105,15 +63,13 @@ void toggleimage(){ // Switch to inverse of other varible
 
 
 int autonomous_mode(){ // not inuse. work in progress.
-  Brain.Screen.clearScreen();
-  Brain.Screen.print("Autonomous Active");
+  wait(2, sec);
+  Brain.Screen.setCursor(8,1);
+  Brain.Screen.print("object center: %d",objectCenter);
   float FL_motor_command;
   float BL_motor_command;
   float FR_motor_command;
   float BR_motor_command;
-  Brain.Screen.clearScreen(1);
-  Brain.Screen.setCursor(1, 1);
-  Brain.Screen.print(objectCenter);
   while(true){
     if (objectCenter > 160){
       FL_motor_command = -25;
@@ -142,7 +98,8 @@ int autonomous_mode(){ // not inuse. work in progress.
     FrontRight.spin(forward);
     BackLeft.spin(forward);
     BackRight.spin(forward);
-    wait(25, sec);
+    wait(2, sec);
+   
   }
   return 0; // returns valid and complete
 }
@@ -151,33 +108,31 @@ task autonomousModeTask = task(autonomous_mode); // setup task of autonomous
 
 void toggleAutonomous(){ // toggles the autonomous boolean to the opposite and starts the task of autonomous
   if(autonoumousActive == false){ 
-    autonomousModeTask.resume(); // start autonoumous task
-    Controller1.Screen.setCursor(2, 1); 
-    Controller1.Screen.clearLine(2);
-    Controller1.Screen.print("Autonomous On"); // display active to controller screen
+    wait(250, msec);
     autonoumousActive = true;
-  } else{
-    autonomousModeTask.suspend(); // stop autonoumous task
-    Controller1.Screen.setCursor(2, 1);
+    autonomousModeTask.resume(); // start autonoumous task
     Controller1.Screen.clearLine(2);
+    Controller1.Screen.setCursor(2, 1); 
+    Controller1.Screen.print("Autonomous On"); // display active to controller screen
+    Brain.Screen.clearLine(11);
+    Brain.Screen.setCursor(11, 1); 
+    Brain.Screen.print("Autonomous On"); // display active to controller screen
+
+    
+  } else if(autonoumousActive == true){
+    autonomousModeTask.suspend(); // stop autonoumous task
+    Controller1.Screen.clearLine(2);
+    Controller1.Screen.setCursor(2, 1);
     Controller1.Screen.print("Autonomous Off"); // display stop to controller screen
+    Brain.Screen.clearLine(11);
+    Brain.Screen.setCursor(11, 1); 
+    Brain.Screen.print("Autonomous Off"); // display active to controller screen
     autonoumousActive = false;
   }
 }
 
 
-float cap(float inputVal, float maxMinVal) { // Cap allow full use of motor range with steering
-  if (inputVal > maxMinVal){
-    return maxMinVal;
-  } else if (inputVal < -maxMinVal) {
-    return -maxMinVal;
-  } else{
-    return inputVal;
-  };
-  // if inputVal is greater than max min val, return max min val
-  // if less than min val then return -maxMinVal
-  // else return inputVal
-}
+
 
 
 void turbocode(){ // BETA TURBO CODE CALLBACK FUNCTION
@@ -303,7 +258,7 @@ int buttonControls(){ // Controller Button Actions
 
 
   Controller1.ButtonR1.pressed(turbocode); // Activate Turbo Mode
-  Controller1.ButtonDown.pressed(toggleimage); // Activates Image Detection
+  Controller1.ButtonUp.pressed(toggleimage); // Activates Image Detection
   Controller1.ButtonA.pressed(toggleAutonomous);
 
 
@@ -335,15 +290,11 @@ int buttonControls(){ // Controller Button Actions
 
 void setup(){ // Setup Code -- Only Runs Once
   autonomousModeTask.suspend();
-  //visionCamTask.suspend();
   Controller1.Screen.clearScreen();
-  Controller1.Screen.setCursor(1,1);
-  Controller1.Screen.print("Yaseen");
-
+  Brain.Screen.drawImageFromFile("yaseencute.png", 1, 1);
   Brain.Screen.setCursor(1,1);
-  Brain.Screen.print("Yaseen <3");
-  Brain.Screen.setCursor(14, 1);
-  Brain.Screen.print("Hayden was here ;)");
+  Brain.Screen.setFillColor(vex::color(0,0,0));
+  Brain.Screen.print("Programming by Hayden <3  (╯°□°）╯︵ ┻━┻)");
 }
 
 
@@ -351,11 +302,18 @@ int main() {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
   setup();
+  
   task driveTrainLoopTask = task(driveTrainLoop); // Task for drive train
   task buttonControlsTask = task(buttonControls); // Task for controller button presses
   
+  //vex::Gif gif("kanye.gif", 270, 120); 
+  //int count=0;
   while(420==420) {
-    vexDelay(25);  //delay to limit resources
+    //Brain.Screen.printAt(0,0, "render %d", count++);
+    //Brain.Screen.render();
+    Brain.Screen.setCursor(4,1);
+    Brain.Screen.print(imagedetection);
+    vexDelay(50);  //delay to limit resources
   }
   
 }

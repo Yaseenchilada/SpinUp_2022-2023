@@ -20,3 +20,11 @@ Controller Screen Lines Being Used
 1. ColorSensor LargestObject.centerX && VISION ON
 2. Autonomous Active - line 107 & line 113
 3. Turbo Mode Active - line 133 & line 145
+
+
+
+TODO:
+- ButtonB - VisionSensor is set to signature disc
+- Test Autonomous with robot
+- create a functino that has all of the motor functions
+- 

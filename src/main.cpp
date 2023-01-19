@@ -32,13 +32,13 @@ using namespace vex;
 
 
 int visionDetectionCallback(){
-  visionDetection(objectCenter);
+  visionDetection();
   return 0;
 }
 task visionCamTask = task(visionDetectionCallback);
 
 int visionDrivingCallback(){
-  visionDriving(objectCenter);
+  visionDriving();
   return 0;
 }
 task visionDrivingTask = task(visionDrivingCallback);

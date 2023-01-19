@@ -23,4 +23,3 @@ bool turboModeActive = false; // Current Turbo Status
 bool visionDrivingActive = false; // BETA IMAGE DETECTION Status
 bool autonoumousActive = false; // autonmous active status
 
-int objectCenter = 110;

@@ -3,7 +3,9 @@
 
 using namespace vex;
 
-int visionDetection(int objectCenter){
+int objectCenter = 0;
+
+int visionDetection(){
   //int objectCenter = 100;
   Brain.Screen.setCursor(5, 1);
   Brain.Screen.print("WORKINGS?");
@@ -18,7 +20,7 @@ int visionDetection(int objectCenter){
     Brain.Screen.print("Detected Object");
     Controller1.Screen.clearLine(1);
     Controller1.Screen.setCursor(1,1);
-    Controller1.Screen.print(ColorSensor.largestObject.centerX);
+    Controller1.Screen.print(objectCenter);
 
   }else{
     ColorSensor.setLedColor(255, 0, 0); // Red if no disc
@@ -27,12 +29,12 @@ int visionDetection(int objectCenter){
     Brain.Screen.print("Detected Mo Object");
     objectCenter = 0;
   }
-  wait(300, msec);
+  wait(100, msec);
   }
   return 0;
 }
 
-int visionDriving(int objectCenter){ // not inuse. work in progress.
+int visionDriving(){ // not inuse. work in progress.
   wait(2, sec); // Inital Delay to not mess other stuff
   Brain.Screen.setCursor(8,1);
   Brain.Screen.print("object center: %d",objectCenter);
@@ -42,16 +44,21 @@ int visionDriving(int objectCenter){ // not inuse. work in progress.
   float BR_motor_command;
 
   while(true){
-    if (objectCenter > 160){
-      FL_motor_command = -25;
-      BL_motor_command = -25;
-      FR_motor_command = 25;
-      BR_motor_command = 25;
+    if (objectCenter > 100){
+      FL_motor_command = 25;
+      BL_motor_command = 25;
+      FR_motor_command = -25;
+      BR_motor_command = -25;
     } else if (objectCenter < 70){
       FL_motor_command = -25;
       BL_motor_command = -25;
       FR_motor_command = 25;
       BR_motor_command = 25;
+    } else if (objectCenter == 0){
+      FL_motor_command = 0;
+      BL_motor_command = 0;
+      FR_motor_command = 0;
+      BR_motor_command = 0;
     } else{
       FL_motor_command = 25;
       BL_motor_command = 25;

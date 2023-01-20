@@ -29,7 +29,7 @@ int visionDetection(){
     Brain.Screen.print("Detected Mo Object");
     objectCenter = 0;
   }
-  wait(100, msec);
+  wait(200, msec);
   }
   return 0;
 }
@@ -44,7 +44,7 @@ int visionDriving(){ // not inuse. work in progress.
   float BR_motor_command;
 
   while(true){
-    if (objectCenter > 100){
+    if (objectCenter > 200){
       FL_motor_command = 25;
       BL_motor_command = 25;
       FR_motor_command = -25;
@@ -75,7 +75,7 @@ int visionDriving(){ // not inuse. work in progress.
     FrontRight.spin(forward);
     BackLeft.spin(forward);
     BackRight.spin(forward);
-    wait(2, sec);
+    wait(0.500, sec);
    
   }
   return 0; // returns valid and complete

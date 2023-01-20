@@ -72,7 +72,6 @@ int autonomous_mode(){ // not inuse. work in progress.
   while(true){
     Brain.Screen.setCursor(9,1);
     Brain.Screen.print("hi autumn");
-   
   }
   return 0; // returns valid and complete
 }

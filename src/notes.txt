@@ -9,9 +9,9 @@ Brain Screen Lines Being Used
 4.
 5. VISION DIRIVNG "WORKING" - line 11
 6.
-7.
+7. frontleft rot
 8. Object Center
-9. hi autumn
+9. 
 10. Vision ON OR OFF - line 45 &
 11. Autonomous Active - line 62
 12.
@@ -28,3 +28,10 @@ TODO:
 - Test Autonomous with robot
 - create a functino that has all of the motor functions
 - 
+
+
+
+
+
+
+one rev =  

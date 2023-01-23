@@ -69,10 +69,17 @@ void toggleimage(){ // Switch to inverse of other varible
 
 int autonomous_mode(){ // not inuse. work in progress.
   wait(2, sec); // Inital Delay to not mess other stuff
-  while(true){
-    Brain.Screen.setCursor(9,1);
-    Brain.Screen.print("hi autumn");
-  }
+  FrontLeft.setVelocity(25, percent);
+  BackLeft.setVelocity(25, percent);
+  FrontRight.setVelocity(25, percent);
+  BackRight.setVelocity(25, percent);
+while(true){
+  FrontLeft.spinFor(1, sec);
+  BackLeft.spinFor(1, sec);
+  FrontRight.spinFor(1, sec);
+  BackRight.spinFor(1, sec);
+  wait(5, sec);
+}
   return 0; // returns valid and complete
 }
 task autonomousModeTask = task(autonomous_mode); // setup task of autonomous 
@@ -261,6 +268,8 @@ int main() {
   while(420==420) {
     Brain.Screen.printAt(0,0, "render %d", count++);
     Brain.Screen.render();
+    Brain.Screen.setCursor(7,1);
+    Brain.Screen.print(FrontLeft.position(rev));
     vexDelay(50);  //delay to limit resources
   }
 }

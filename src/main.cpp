@@ -31,6 +31,7 @@
 
 using namespace vex;
 
+competition Competition;
 
 int visionDetectionCallback(){
   visionDetection();
@@ -67,23 +68,12 @@ void toggleimage(){ // Switch to inverse of other varible
   }
 }
 
+int autonomous_mode_callback(){
+  autonomous_mode();
+  return 0;
+}
 
-int autonomous_mode(){ // not inuse. work in progress.
-  wait(2, sec); // Inital Delay to not mess other stuff
-  FrontLeft.setVelocity(25, percent);
-  BackLeft.setVelocity(25, percent);
-  FrontRight.setVelocity(25, percent);
-  BackRight.setVelocity(25, percent);
-while(true){
-  FrontLeft.spinFor(1, sec);
-  BackLeft.spinFor(1, sec);
-  FrontRight.spinFor(1, sec);
-  BackRight.spinFor(1, sec);
-  wait(5, sec);
-}
-  return 0; // returns valid and complete
-}
-task autonomousModeTask = task(autonomous_mode); // setup task of autonomous 
+task autonomousModeTask = task(autonomous_mode_callback); // setup task of autonomous 
 
 void toggleAutonomous(){ // toggles the autonomous boolean to the opposite and starts the task of autonomous
   if(autonoumousActive == false){ 
@@ -176,6 +166,7 @@ int driveTrainLoop(){ // Controls Drivetrain > Gets Joystick Position & Sets to 
 
 int buttonControls(){ // Controller Button Actions
   while(true){
+  if (autonoumousActive == false){
   if(Controller1.ButtonY.pressing() == true) { //This is for Conveyor1 and Intake
     ColorRoller.setVelocity(currentcolorRollerSpeed,percent); // Set Velocity of Intake
     Conveyor1.setVelocity(currentConveyor1Speed,percent); // Set Velocity of Conveyor1
@@ -217,6 +208,7 @@ int buttonControls(){ // Controller Button Actions
     Conveyor2.setVelocity(0,percent); // Stop Motor Velocity 
   }
 
+  }
 
   Controller1.ButtonR1.pressed(turbocode); // Activate Turbo Mode
   Controller1.ButtonUp.pressed(toggleimage); // Activates Image Detection
@@ -247,8 +239,7 @@ int buttonControls(){ // Controller Button Actions
 
 
 void setup(){ // Setup Code -- Only Runs Once
-  autonomousModeTask.suspend();
-  visionDrivingTask.suspend();
+
   task driveTrainLoopTask = task(driveTrainLoop); // Task for drive train
   task buttonControlsTask = task(buttonControls); // Task for controller button presses
   // Screen Setup
@@ -258,12 +249,20 @@ void setup(){ // Setup Code -- Only Runs Once
   Brain.Screen.setFillColor(vex::color(0,0,0));
   Brain.Screen.print("Programming by Hayden <3 <o/");
 }
-
+void autonomous_mode_callback2(void){
+  autonomous_mode();
+}
 
 int main() {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
-  setup();
+  autonomousModeTask.suspend();
+  visionDrivingTask.suspend();
+  
+  Competition.autonomous(autonomous_mode_callback2);
+  //Competition.drivercontrol(usercontrol);
+  Competition.drivercontrol(setup);
+
   vex::Gif gif("kanye.gif", 270, 120); 
   int count=0;
   while(420==420) {

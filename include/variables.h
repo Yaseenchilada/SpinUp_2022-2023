@@ -13,8 +13,8 @@ int colorRollerSpeedTurbo = 80; // Turbo Intake/ColorRoller Speed
 int currentConveyor1Speed = conveyor1Speed;
 int currentcolorRollerSpeed = colorRollerSpeed;
  
-int conveyor2Speed = 75;
-int conveyor2SpeedTurbo = 100;
+int conveyor2Speed = 55;
+int conveyor2SpeedTurbo = 90;
 int currentConveyor2Speed = conveyor2Speed;
 
 int flywheelStrength = 100; // Flywheel Strength 

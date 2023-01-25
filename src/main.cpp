@@ -27,6 +27,7 @@
 #include "visionFunctions.h"
 #include "calculations.h"
 #include "variables.h"
+#include "autonomousfunc.h"
 
 using namespace vex;
 

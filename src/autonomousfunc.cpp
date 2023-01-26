@@ -23,7 +23,6 @@ void driveForward(float inches, float speed) {
 void driveTurn(float degrees){
   float turningRatio = turningDiameter / wheelDiameter;
   float wheelDegrees = turningRatio * degrees;
-
     FrontRight.startRotateFor(-wheelDegrees, deg, turningSpeed, rpm);
     FrontLeft.startRotateFor(wheelDegrees, deg, turningSpeed, rpm);
     BackRight.startRotateFor(-wheelDegrees, deg, turningSpeed, rpm);
@@ -58,9 +57,6 @@ void startConveyorToFlywheel(){
 void stopConveyorToFlywheel(){
   Conveyor2.setVelocity(0, percent);
 }
-
-
-
 
 
 void autonomous_mode(){

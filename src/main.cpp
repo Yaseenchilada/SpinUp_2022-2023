@@ -24,7 +24,7 @@
 
 #include "vex.h"
 #include "gifclass.h"
-#include "visionFunctions.h"
+//#include "visionFunctions.h"
 #include "calculations.h"
 #include "variables.h"
 #include "autonomousfunc.h"
@@ -32,9 +32,6 @@
 using namespace vex;
 
 competition Competition;
-
-
-
 
 void turbocode(){ // BETA TURBO CODE CALLBACK FUNCTION
   if(turboModeActive == false){
@@ -148,7 +145,6 @@ int buttonControls(){ // Controller Button Actions
   }
 
   Controller1.ButtonR1.pressed(turbocode); // Activate Turbo Mode
-  
 
   if(Controller1.ButtonLeft.pressing() == true){ //Decreases flywheel strength
     if(flywheelStrength > 10){
@@ -176,6 +172,9 @@ int buttonControls(){ // Controller Button Actions
 void setup(){ // Setup Code -- Only Runs Once
   // Screen Setup
   Controller1.Screen.clearScreen();
+  Controller1.Screen.setCursor(1, 1);
+  Controller1.Screen.print("Hayden");
+
   Brain.Screen.drawImageFromFile("yaseencute.png", 1, 1);
   Brain.Screen.setCursor(1,1);
   Brain.Screen.setFillColor(vex::color(0,0,0));

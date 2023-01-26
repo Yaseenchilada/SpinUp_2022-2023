@@ -18,6 +18,11 @@ void driveForward(float inches, float speed) {
     FrontLeft.startRotateFor(degrees, deg, speed, rpm);
     BackRight.startRotateFor(degrees, deg, speed, rpm);
     BackLeft.rotateFor(degrees, deg, speed, rpm);
+    FrontRight.stop();
+    FrontLeft.stop();
+    BackRight.stop();
+    BackLeft.stop();
+    
 }
 
 void driveTurn(float degrees){
@@ -27,6 +32,16 @@ void driveTurn(float degrees){
     FrontLeft.startRotateFor(wheelDegrees, deg, turningSpeed, rpm);
     BackRight.startRotateFor(-wheelDegrees, deg, turningSpeed, rpm);
     BackLeft.rotateFor(wheelDegrees, deg, turningSpeed, rpm);
+}
+
+void driveStrafe(float inches){
+    float speed = 100;
+    float inchesPerDegree = wheelCircumference / 360;
+    float degrees = (inches / inchesPerDegree)/2;
+    FrontRight.startRotateFor(degrees, deg, speed, rpm);
+    FrontLeft.startRotateFor(-degrees, deg, speed, rpm);
+    BackRight.startRotateFor(-degrees, deg, speed, rpm);
+    BackLeft.rotateFor(degrees, deg, speed, rpm);
 }
 
 void startIntake(){
@@ -41,8 +56,8 @@ void stopIntake(){
   Conveyor1.setVelocity(0, percent);
 }
 
-void startFlywheel(){
-  Flywheel.setVelocity(70, percent);
+void startFlywheel(int powera){
+  Flywheel.setVelocity(powera, percent);
   Flywheel.spin(forward);
 }
 void stopFlywheel(){
@@ -54,32 +69,52 @@ void startConveyorToFlywheel(){
   Conveyor2.spin(forward);
 }
 
+void startConveyorToFlywheelIntermittent(){
+  Conveyor2.setVelocity(75, percent);
+  Conveyor2.spin(forward);
+  wait(.5, sec);
+  Conveyor2.setVelocity(40, percent);
+  wait(.5, sec);
+  Conveyor2.setVelocity(75, percent);
+}
+
 void stopConveyorToFlywheel(){
   Conveyor2.setVelocity(0, percent);
 }
 
 
 void autonomous_mode(){
+  wait(2, sec);
+  Controller1.Screen.setCursor(2, 1);
+  Controller1.Screen.print("ih ate you");
+  driveForward(tile*3, translationSpeed);
+  wait(2,sec); //delay
+  driveTurn(90);
+  wait(3,sec);
 
-  driveForward(.5*tile, translationSpeed);
-  driveTurn(45);
 
   startIntake();
   wait(.5, sec);
+ driveForward(3, translationSpeed);
 
+  /*
   driveForward(2*tile, translationSpeed);
-  
+  wait(.5,sec); //delay
   driveTurn(-90);
   wait(2, sec);
-  startFlywheel();
+  startFlywheel(80);
   wait(2,sec);
   stopIntake();
-
-  startConveyorToFlywheel();
+  wait(.5,sec); //delay
+  startConveyorToFlywheelIntermittent();
   wait(4, sec);
   stopConveyorToFlywheel();
   stopFlywheel();
-
-  driveForward(tile, translationSpeed);
-
+  wait(.5,sec); //delay
+  driveTurn(45);
+  driveForward(2*tile, translationSpeed);
+  wait(.5,sec); //delay
+  driveTurn(45);
+  driveForward(tile, 50);
+  */
 }

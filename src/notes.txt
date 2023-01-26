@@ -24,9 +24,9 @@ Controller Screen Lines Being Used
 
 
 TODO:
-- ButtonB - VisionSensor is set to signature disc
-- Test Autonomous with robot
-- create a functino that has all of the motor functions
+- done - ButtonB - VisionSensor is set to signature disc
+- done - Test Autonomous with robot
+- done -  create a functino that has all of the motor functions
 - 
 
 

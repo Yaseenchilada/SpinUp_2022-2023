@@ -9,7 +9,7 @@ Brain Screen Lines Being Used
 4.
 5. VISION DIRIVNG "WORKING" - line 11
 6.
-7. frontleft rot
+7. 
 8. Object Center
 9. 
 10. Vision ON OR OFF - line 45 &
@@ -34,10 +34,58 @@ TODO:
 
 
 
-one rev =  
+13in across the front two wheels
+and 12in back to front.
 
 
 
-13 across the front two wheels
 
-and 12 back to front.
+
+
+
+
+
+
+
+
+
+old autonomous in main.cpp
+
+
+/*
+int autonomous_mode_callback(){
+  autonomous_mode();
+  return 0;
+}
+
+task autonomousModeTask = task(autonomous_mode_callback); // setup task of autonomous 
+
+
+void toggleAutonomous(){ // toggles the autonomous boolean to the opposite and starts the task of autonomous
+  if(autonoumousActive == false){ 
+    wait(250, msec);
+    autonoumousActive = true;
+    autonomousModeTask.resume(); // start autonoumous task
+    Controller1.Screen.clearLine(2);
+    Controller1.Screen.setCursor(2, 1); 
+    Controller1.Screen.print("Autonomous On"); // display active to controller screen
+    Brain.Screen.clearLine(11);
+    Brain.Screen.setCursor(11, 1); 
+    Brain.Screen.print("Autonomous On"); // display active to controller screen
+  } else if(autonoumousActive == true){
+    autonomousModeTask.suspend(); // stop autonoumous task
+    Controller1.Screen.clearLine(2);
+    Controller1.Screen.setCursor(2, 1);
+    Controller1.Screen.print("Autonomous Off"); // display stop to controller screen
+    Brain.Screen.clearLine(11);
+    Brain.Screen.setCursor(11, 1); 
+    Brain.Screen.print("Autonomous Off"); // display active to controller screen
+    autonoumousActive = false;
+  }
+}
+*/
+
+added to button mapping
+//Controller1.ButtonDown.pressed(toggleAutonomous); // Activates Autonomous
+added to setup
+//autonomousModeTask.suspend();

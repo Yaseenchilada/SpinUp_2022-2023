@@ -33,70 +33,7 @@ using namespace vex;
 
 competition Competition;
 
-int visionDetectionCallback(){
-  visionDetection();
-  return 0;
-}
-task visionCamTask = task(visionDetectionCallback);
 
-int visionDrivingCallback(){
-  visionDriving();
-  return 0;
-}
-task visionDrivingTask = task(visionDrivingCallback);
-
-void toggleimage(){ // Switch to inverse of other varible
-  if(visionDrivingActive == false){ 
-    Brain.Screen.clearLine(10); // set cursor on the brain screen to line 12
-    Brain.Screen.setCursor(10, 1);
-    Brain.Screen.print("VISION ON"); // 
-    Controller1.Screen.clearLine(1); // set cursor on the brain screen to line 12
-    Controller1.Screen.setCursor(1, 1);
-    Controller1.Screen.print("VISION ON"); // 
-    visionDrivingTask.resume(); // resume the task
-
-    visionDrivingActive = true;
-  }else if(visionDrivingActive == true){
-    Brain.Screen.clearLine(10); // set cursor on the brain screen to line 12
-    Brain.Screen.setCursor(10, 1);
-    Brain.Screen.print("VISION OFF"); // display vision is off 
-    Controller1.Screen.clearLine(1); // set cursor on the brain screen to line 12
-    Controller1.Screen.setCursor(1, 1);
-    Controller1.Screen.print("VISION OFF"); // 
-    visionDrivingTask.suspend(); // testing this suspend method
-    visionDrivingActive = false;
-  }
-}
-
-int autonomous_mode_callback(){
-  autonomous_mode();
-  return 0;
-}
-
-task autonomousModeTask = task(autonomous_mode_callback); // setup task of autonomous 
-
-void toggleAutonomous(){ // toggles the autonomous boolean to the opposite and starts the task of autonomous
-  if(autonoumousActive == false){ 
-    wait(250, msec);
-    autonoumousActive = true;
-    autonomousModeTask.resume(); // start autonoumous task
-    Controller1.Screen.clearLine(2);
-    Controller1.Screen.setCursor(2, 1); 
-    Controller1.Screen.print("Autonomous On"); // display active to controller screen
-    Brain.Screen.clearLine(11);
-    Brain.Screen.setCursor(11, 1); 
-    Brain.Screen.print("Autonomous On"); // display active to controller screen
-  } else if(autonoumousActive == true){
-    autonomousModeTask.suspend(); // stop autonoumous task
-    Controller1.Screen.clearLine(2);
-    Controller1.Screen.setCursor(2, 1);
-    Controller1.Screen.print("Autonomous Off"); // display stop to controller screen
-    Brain.Screen.clearLine(11);
-    Brain.Screen.setCursor(11, 1); 
-    Brain.Screen.print("Autonomous Off"); // display active to controller screen
-    autonoumousActive = false;
-  }
-}
 
 
 void turbocode(){ // BETA TURBO CODE CALLBACK FUNCTION
@@ -211,9 +148,7 @@ int buttonControls(){ // Controller Button Actions
   }
 
   Controller1.ButtonR1.pressed(turbocode); // Activate Turbo Mode
-  Controller1.ButtonUp.pressed(toggleimage); // Activates Image Detection
-  Controller1.ButtonDown.pressed(toggleAutonomous); // Activates Autonomous
-
+  
 
   if(Controller1.ButtonLeft.pressing() == true){ //Decreases flywheel strength
     if(flywheelStrength > 10){
@@ -239,9 +174,6 @@ int buttonControls(){ // Controller Button Actions
 
 
 void setup(){ // Setup Code -- Only Runs Once
-
-  task driveTrainLoopTask = task(driveTrainLoop); // Task for drive train
-  task buttonControlsTask = task(buttonControls); // Task for controller button presses
   // Screen Setup
   Controller1.Screen.clearScreen();
   Brain.Screen.drawImageFromFile("yaseencute.png", 1, 1);
@@ -249,6 +181,13 @@ void setup(){ // Setup Code -- Only Runs Once
   Brain.Screen.setFillColor(vex::color(0,0,0));
   Brain.Screen.print("Programming by Hayden <3 <o/");
 }
+
+void driverControl(){
+  task driveTrainLoopTask = task(driveTrainLoop); // Task for drive train
+  task buttonControlsTask = task(buttonControls); // Task for controller button presses
+}
+
+
 void autonomous_mode_callback2(void){
   autonomous_mode();
 }
@@ -256,20 +195,16 @@ void autonomous_mode_callback2(void){
 int main() {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
-  autonomousModeTask.suspend();
-  visionDrivingTask.suspend();
+  setup();
   
   Competition.autonomous(autonomous_mode_callback2);
-  //Competition.drivercontrol(usercontrol);
-  Competition.drivercontrol(setup);
+  Competition.drivercontrol(driverControl);
 
   vex::Gif gif("kanye.gif", 270, 120); 
   int count=0;
   while(420==420) {
     Brain.Screen.printAt(0,0, "render %d", count++);
     Brain.Screen.render();
-    Brain.Screen.setCursor(7,1);
-    Brain.Screen.print(FrontLeft.position(rev));
     vexDelay(50);  //delay to limit resources
   }
 }

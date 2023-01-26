@@ -10,14 +10,14 @@ float translationSpeed = 100;
 float turningSpeed = 50;
 float tile = 24;
 
-void driveForward(float inches) {
+void driveForward(float inches, float speed) {
     float inchesPerDegree = wheelCircumference / 360;
     float degrees = inches / inchesPerDegree;
 
-    FrontRight.startRotateFor(degrees, deg, translationSpeed, rpm);
-    FrontLeft.startRotateFor(degrees, deg, translationSpeed, rpm);
-    BackRight.startRotateFor(degrees, deg, translationSpeed, rpm);
-    BackLeft.rotateFor(degrees, deg, translationSpeed, rpm);
+    FrontRight.startRotateFor(degrees, deg, speed, rpm);
+    FrontLeft.startRotateFor(degrees, deg, speed, rpm);
+    BackRight.startRotateFor(degrees, deg, speed, rpm);
+    BackLeft.rotateFor(degrees, deg, speed, rpm);
 }
 
 void driveTurn(float degrees){
@@ -59,33 +59,31 @@ void stopConveyorToFlywheel(){
   Conveyor2.setVelocity(0, percent);
 }
 
+
+
+
+
 void autonomous_mode(){
-  wait(2, sec);
 
-
-  driveForward(tile*2);
-
-  driveTurn(90);
-  wait(1, sec);
+  driveForward(.5*tile, translationSpeed);
+  driveTurn(45);
 
   startIntake();
   wait(.5, sec);
 
-  driveForward(tile);
-  wait(4, sec);
-  stopIntake();
-  wait(1,sec);
-
-  driveTurn(-45);
-  driveForward(tile/2);
-
-  startFlywheel();
-  wait(3, sec);
-  startConveyorToFlywheel();
+  driveForward(2*tile, translationSpeed);
+  
+  driveTurn(-90);
   wait(2, sec);
+  startFlywheel();
+  wait(2,sec);
+  stopIntake();
+
+  startConveyorToFlywheel();
+  wait(4, sec);
   stopConveyorToFlywheel();
   stopFlywheel();
 
-  driveForward(tile);
+  driveForward(tile, translationSpeed);
 
 }

@@ -81,3 +81,49 @@ int visionDriving(){ // not inuse. work in progress.
   return 0; // returns valid and complete
 }
 
+
+
+
+int visionDetectionCallback(){
+  visionDetection();
+  return 0;
+}
+task visionCamTask = task(visionDetectionCallback);
+
+int visionDrivingCallback(){
+  visionDriving();
+  return 0;
+}
+task visionDrivingTask = task(visionDrivingCallback);
+
+
+
+/*
+void toggleimage(){ // Switch to inverse of other varible
+  if(visionDrivingActive == false){ 
+    Brain.Screen.clearLine(10); // set cursor on the brain screen to line 12
+    Brain.Screen.setCursor(10, 1);
+    Brain.Screen.print("VISION ON"); // 
+    Controller1.Screen.clearLine(1); // set cursor on the brain screen to line 12
+    Controller1.Screen.setCursor(1, 1);
+    Controller1.Screen.print("VISION ON"); // 
+    visionDrivingTask.resume(); // resume the task
+
+    visionDrivingActive = true;
+  }else if(visionDrivingActive == true){
+    Brain.Screen.clearLine(10); // set cursor on the brain screen to line 12
+    Brain.Screen.setCursor(10, 1);
+    Brain.Screen.print("VISION OFF"); // display vision is off 
+    Controller1.Screen.clearLine(1); // set cursor on the brain screen to line 12
+    Controller1.Screen.setCursor(1, 1);
+    Controller1.Screen.print("VISION OFF"); // 
+    visionDrivingTask.suspend(); // testing this suspend method
+    visionDrivingActive = false;
+  }
+}
+*/
+
+// --- added to button mapping ---//
+//Controller1.ButtonUp.pressed(toggleimage); // Activates Image Detection
+// --- added to setup ---//
+// visionDrivingTask.suspend(); 

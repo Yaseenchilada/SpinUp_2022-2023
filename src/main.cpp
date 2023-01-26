@@ -197,7 +197,7 @@ int main() {
   setup();
   
   Competition.autonomous(autonomous_mode_callback2);
-  Competition.drivercontrol(driverControl);
+  //Competition.drivercontrol(driverControl);
 
   vex::Gif gif("kanye.gif", 270, 120); 
   int count=0;

@@ -10,19 +10,14 @@ float translationSpeed = 100;
 float turningSpeed = 50;
 float tile = 24;
 
-void driveForward(float inches, float speed) {
+void driveForward(float inches) {
     float inchesPerDegree = wheelCircumference / 360;
     float degrees = inches / inchesPerDegree;
 
-    FrontRight.startRotateFor(degrees, deg, speed, rpm);
-    FrontLeft.startRotateFor(degrees, deg, speed, rpm);
-    BackRight.startRotateFor(degrees, deg, speed, rpm);
-    BackLeft.rotateFor(degrees, deg, speed, rpm);
-    FrontRight.stop();
-    FrontLeft.stop();
-    BackRight.stop();
-    BackLeft.stop();
-    
+    FrontRight.startRotateFor(degrees, deg, 100, rpm);
+    FrontLeft.startRotateFor(degrees, deg, 100, rpm);
+    BackRight.startRotateFor(degrees, deg, 100, rpm);
+    BackLeft.rotateFor(degrees, deg, 100, rpm);
 }
 
 void driveTurn(float degrees){
@@ -87,15 +82,17 @@ void autonomous_mode(){
   wait(2, sec);
   Controller1.Screen.setCursor(2, 1);
   Controller1.Screen.print("ih ate you");
-  driveForward(tile*3, translationSpeed);
-  wait(2,sec); //delay
-  driveTurn(90);
-  wait(3,sec);
+  driveForward(tile*4);
+  wait(10,sec);
+  //wait(2,sec); //delay
+  Controller1.Screen.print("josh is");
+  //driveTurn(90);
+  //wait(3,sec);
 
 
-  startIntake();
-  wait(.5, sec);
- driveForward(3, translationSpeed);
+  //startIntake();
+  //wait(.5, sec);
+  //driveForward(3);
 
   /*
   driveForward(2*tile, translationSpeed);
